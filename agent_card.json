@@ -1,0 +1,40 @@
+{
+  "name": "MediCopilot",
+  "version": "1.0.0",
+  "description": "AI Clinical Copilot — generates structured pre-visit patient briefings using FHIR data, multi-agent RAG reasoning, drug safety checking, risk scoring, and SOAP note generation.",
+  "author": "MediCopilot Team",
+  "icon": "🏥",
+  "tags": ["clinical", "fhir", "rag", "multi-agent", "drug-safety", "soap-notes"],
+  "capabilities": [
+    "clinical_summary",
+    "differential_diagnosis",
+    "drug_interaction_check",
+    "risk_scoring",
+    "soap_note_generation",
+    "second_opinion",
+    "temporal_memory",
+    "vital_anomaly_detection",
+    "rag_medical_knowledge"
+  ],
+  "sharp_context": {
+    "patient_id": { "required": true, "type": "string" },
+    "fhir_token":  { "required": false, "type": "string" },
+    "sharp_token": { "required": false, "type": "string" }
+  },
+  "invoke_endpoint": "/invoke",
+  "health_endpoint": "/health",
+  "agents": [
+    { "name": "FHIRAgent",         "role": "Fetches patient bundle from FHIR R4 server" },
+    { "name": "MemoryAgent",       "role": "Tracks patient trends across visits" },
+    { "name": "AnomalyDetector",   "role": "Rule-based vital sign anomaly detection (pre-LLM)" },
+    { "name": "RAGAgent",          "role": "Retrieves relevant medical guidelines from FAISS" },
+    { "name": "DiagnosisAgent",    "role": "Generates differential diagnosis with confidence scores" },
+    { "name": "DrugSafetyAgent",   "role": "Checks medication interactions and contraindications" },
+    { "name": "RiskScoringAgent",  "role": "Calculates cardiovascular and condition-specific risk %" },
+    { "name": "SecondOpinionAgent","role": "Challenges primary diagnosis for balanced assessment" },
+    { "name": "SOAPNoteGenerator", "role": "Synthesizes all outputs into clinical SOAP documentation" }
+  ],
+  "llm": "llama-3.1-8b-instant (Groq)",
+  "vector_db": "FAISS",
+  "fhir_version": "R4"
+}
