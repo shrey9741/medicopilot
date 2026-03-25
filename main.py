@@ -5,6 +5,7 @@ The /.well-known/agent.json endpoint registers it with Prompt Opinion.
 """
 import json
 import os
+import asyncio
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
@@ -23,8 +24,9 @@ vectorstore = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global vectorstore
+    loop = asyncio.get_event_loop()
     print("Loading RAG vectorstore...")
-    vectorstore = load_vectorstore()
+    vectorstore = await loop.run_in_executor(None, load_vectorstore)
     print("MediCopilot ready.")
     yield
 
