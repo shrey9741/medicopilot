@@ -2,8 +2,9 @@
   - type: web
     name: medicopilot
     runtime: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip install -r requirements.txt && python -c "from rag.retriever import build_vectorstore; build_vectorstore()"
+    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
     envVars:
       - key: GROQ_API_KEY
         sync: false
+    pythonVersion: 3.11.0
