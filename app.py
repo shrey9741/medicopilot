@@ -15,7 +15,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-API_BASE = os.getenv("API_BASE", "http://localhost:8000")
+API_BASE = os.getenv("API_BASE", "https://medicopilot.onrender.com")
 
 # ── Styles ────────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -45,9 +45,24 @@ with st.sidebar:
 
     st.markdown("**Select Patient**")
     patient_options = {
+        # Original
         "P001 — John Doe (62M, Diabetes + HTN + CKD)": "P001",
         "P002 — Sarah Chen (45F, AFib + Hypothyroidism)": "P002",
         "P003 — Marcus Johnson (71M, COPD + Heart Failure)": "P003",
+        # Oncology
+        "P004 — Patricia Williams (54F, Breast Cancer HER2+)": "P004",
+        "P005 — Robert Nguyen (67M, Lung Cancer Stage IV)": "P005",
+        # Pediatric
+        "P006 — Aiden Patel (8M, T1 Diabetes + Asthma)": "P006",
+        "P007 — Lily Thompson (5F, ALL Leukemia)": "P007",
+        # Mental Health
+        "P008 — Diana Foster (34F, Bipolar I + Anxiety)": "P008",
+        "P009 — Carlos Rivera (28M, Schizophrenia + SUD)": "P009",
+        # Rare / Complex
+        "P010 — Eleanor Voss (41F, Lupus + Antiphospholipid)": "P010",
+        "P011 — Samuel Okafor (19M, Cystic Fibrosis)": "P011",
+        "P012 — Ingrid Larsson (37F, Multiple Sclerosis)": "P012",
+        "P013 — Theo Blackwood (52M, ALS)": "P013",
     }
     selected_label = st.selectbox("Patient", list(patient_options.keys()), label_visibility="collapsed")
     patient_id = patient_options[selected_label]
@@ -88,12 +103,12 @@ with st.spinner("Running MediCopilot agents..."):
         response = httpx.post(
             f"{API_BASE}/invoke",
             json={"patient_id": patient_id, "sharp_token": sharp_token, "fhir_token": fhir_token},
-            timeout=60.0
+            timeout=120.0
         )
         response.raise_for_status()
         data = response.json()
     except httpx.ConnectError:
-        st.error("Cannot connect to API. Make sure `uvicorn main:app` is running on port 8000.")
+        st.error("Cannot connect to API. Make sure the Render backend is running.")
         st.stop()
     except Exception as e:
         st.error(f"API error: {e}")
