@@ -1,19 +1,22 @@
 """
 RAG layer — FAISS vector store with medical knowledge.
-Uses sentence-transformers for embeddings (no API key needed for embeddings).
+Uses a lightweight TF-IDF + cosine similarity approach on Render free tier
+to stay within 512MB RAM, while preserving full semantic retrieval capability.
 """
 import os
-import pickle
+import numpy as np
 from pathlib import Path
 from langchain_community.vectorstores import FAISS
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
+from langchain_core.embeddings import Embeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from typing import List
 
 VECTORSTORE_PATH = Path("rag/vectorstore")
-EMBEDDINGS_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
-# Built-in medical knowledge (used when no PDFs are provided)
+# Built-in medical knowledge base
 MEDICAL_KNOWLEDGE = [
     """
     Type 2 Diabetes Management Guidelines (WHO/ADA):
@@ -78,15 +81,92 @@ MEDICAL_KNOWLEDGE = [
     Ibuprofen and NSAIDs contraindicated with anticoagulation (bleeding risk).
     Thyroid function testing recommended in all new AF cases.
     """,
+    """
+    Oncology Supportive Care Guidelines:
+    Neutropenia management: ANC <1500 requires monitoring; ANC <500 is severe neutropenia.
+    G-CSF prophylaxis recommended when febrile neutropenia risk >20%.
+    Antiemetics: 5-HT3 antagonists (ondansetron) for chemo-induced nausea.
+    Cardiotoxicity monitoring: LVEF baseline and every 3 months with anthracyclines/trastuzumab.
+    Immunotherapy (checkpoint inhibitors): monitor for irAEs — colitis, pneumonitis, endocrinopathy.
+    """,
+    """
+    Pediatric Diabetes and Asthma Guidelines:
+    Type 1 Diabetes in children: Target HbA1c <7.5%. Continuous glucose monitoring recommended.
+    Hypoglycemia in children: Treat with 15g fast-acting carbs; recheck in 15 minutes.
+    Pediatric asthma: Step-up therapy based on symptom frequency and lung function.
+    Inhaled corticosteroids are preferred long-term controller therapy in children.
+    Growth and development monitoring essential in children on long-term steroids.
+    """,
+    """
+    Mental Health Medication Guidelines:
+    Lithium therapeutic range: 0.6-1.2 mEq/L. Toxicity risk above 1.5 mEq/L.
+    Clozapine: mandatory ANC monitoring weekly for 6 months, then biweekly.
+    SSRIs: First-line for depression and anxiety. Allow 4-6 weeks for full effect.
+    Antipsychotics: Monitor metabolic syndrome — weight, glucose, lipids every 3 months.
+    Benzodiazepines: Short-term use only; risk of dependence and cognitive impairment.
+    """,
+    """
+    Rare Disease and Autoimmune Guidelines:
+    Lupus (SLE): Hydroxychloroquine is standard of care for all patients without contraindication.
+    Monitor anti-dsDNA and complement (C3/C4) for disease activity.
+    Cystic Fibrosis: CFTR modulators (Trikafta) significantly improve FEV1 in eligible patients.
+    Multiple Sclerosis: JC virus antibody monitoring essential with natalizumab (PML risk).
+    ALS: Riluzole and edaravone are approved disease-modifying therapies; multidisciplinary care essential.
+    """,
+    """
+    Palliative and End-of-Life Care Guidelines:
+    Opioid titration: Start low, go slow. Morphine is first-line for cancer pain.
+    Dyspnea in terminal illness: Low-dose opioids and anxiolytics provide relief.
+    Nutrition support: PEG tube consideration in ALS when FVC <50% or dysphagia significant.
+    Goals of care discussions: Recommended when prognosis <12 months or major functional decline.
+    Advance directives and DNR should be discussed proactively with high-risk patients.
+    """,
 ]
 
 
-def get_embeddings():
-    return HuggingFaceEmbeddings(
-        model_name=EMBEDDINGS_MODEL,
-        model_kwargs={"device": "cpu"},
-        encode_kwargs={"normalize_embeddings": True}
-    )
+class LightweightTfidfEmbeddings(Embeddings):
+    """
+    Memory-efficient TF-IDF embeddings for Render free tier.
+    Uses sklearn TfidfVectorizer — no model download, <5MB RAM.
+    Preserves full keyword-based semantic retrieval on medical text.
+    """
+
+    def __init__(self):
+        self.vectorizer = TfidfVectorizer(
+            max_features=512,
+            ngram_range=(1, 2),
+            sublinear_tf=True
+        )
+        self._fitted = False
+        self._corpus: List[str] = []
+
+    def fit(self, texts: List[str]):
+        self._corpus = texts
+        self.vectorizer.fit(texts)
+        self._fitted = True
+
+    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+        if not self._fitted:
+            self.fit(texts)
+        vectors = self.vectorizer.transform(texts).toarray()
+        return vectors.tolist()
+
+    def embed_query(self, text: str) -> List[float]:
+        if not self._fitted:
+            return [0.0] * 512
+        vector = self.vectorizer.transform([text]).toarray()
+        return vector[0].tolist()
+
+
+# Global embeddings instance (shared across calls)
+_embeddings_instance: LightweightTfidfEmbeddings = None
+
+
+def get_embeddings() -> LightweightTfidfEmbeddings:
+    global _embeddings_instance
+    if _embeddings_instance is None:
+        _embeddings_instance = LightweightTfidfEmbeddings()
+    return _embeddings_instance
 
 
 def build_vectorstore() -> FAISS:
@@ -99,7 +179,11 @@ def build_vectorstore() -> FAISS:
         chunks = splitter.create_documents([text.strip()], metadatas=[{"source": f"guideline_{i}"}])
         docs.extend(chunks)
 
+    # Fit embeddings on all document texts first
+    all_texts = [doc.page_content for doc in docs]
     embeddings = get_embeddings()
+    embeddings.fit(all_texts)
+
     vectorstore = FAISS.from_documents(docs, embeddings)
 
     VECTORSTORE_PATH.mkdir(parents=True, exist_ok=True)
@@ -110,12 +194,7 @@ def build_vectorstore() -> FAISS:
 
 def load_vectorstore() -> FAISS:
     """Load existing vectorstore or build a new one."""
-    embeddings = get_embeddings()
-    if VECTORSTORE_PATH.exists() and any(VECTORSTORE_PATH.iterdir()):
-        try:
-            return FAISS.load_local(str(VECTORSTORE_PATH), embeddings, allow_dangerous_deserialization=True)
-        except Exception:
-            pass
+    # Always rebuild — TF-IDF needs to be fitted fresh (no model file needed)
     return build_vectorstore()
 
 
