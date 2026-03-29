@@ -114,11 +114,11 @@ async def health():
 
 @app.get("/patients")
 async def list_patients():
+    from fhir.mock_client import MOCK_PATIENTS
     return {
         "patients": [
-            {"id": "P001", "name": "John Doe", "age": 62, "conditions": ["T2 Diabetes", "Hypertension", "CKD"]},
-            {"id": "P002", "name": "Sarah Chen", "age": 45, "conditions": ["Atrial Fibrillation", "Hypothyroidism"]},
-            {"id": "P003", "name": "Marcus Johnson", "age": 71, "conditions": ["COPD", "Heart Failure", "T2 Diabetes"]},
+            {"id": p.patient_id, "name": p.name, "age": p.age, "conditions": p.conditions}
+            for p in MOCK_PATIENTS.values()
         ]
     }
 
