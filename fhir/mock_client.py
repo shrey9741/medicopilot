@@ -346,4 +346,5 @@ def get_patient_bundle(patient_id: str) -> PatientBundle:
 
 def get_patient_history(patient_id: str) -> list:
     """Returns timestamped visit history for temporal memory."""
-    return MOCK_HISTORY.get(patient_id, [])
+    return MOCK_HISTORY.get(patient_id, [])#   f o r c e   r e d e p l o y  
+ 
