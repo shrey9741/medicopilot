@@ -26,8 +26,35 @@ html, body, .stApp { background: #0b0e14 !important; color: #ecedf6 !important; 
 
 /* Selectbox */
 .stSelectbox > div > div {
-    background: #10131a !important; border: 1px solid rgba(255,255,255,0.07) !important;
-    color: #ecedf6 !important; border-radius: 12px !important; font-size: 0.82rem !important;
+    background: #10131a !important;
+    border: 1px solid rgba(255,255,255,0.07) !important;
+    color: #69daff !important;
+    border-radius: 12px !important;
+    font-size: 0.82rem !important;
+}
+
+/* Dropdown menu */
+[data-baseweb="popover"] {
+    background: #10131a !important;
+}
+[data-baseweb="menu"] {
+    background: #10131a !important;
+    border: 1px solid rgba(105,218,255,0.15) !important;
+    border-radius: 12px !important;
+}
+[role="option"] {
+    background: #10131a !important;
+    color: #a9abb3 !important;
+    font-size: 0.8rem !important;
+    font-family: 'Inter', sans-serif !important;
+}
+[role="option"]:hover {
+    background: #161a21 !important;
+    color: #69daff !important;
+}
+[aria-selected="true"] {
+    background: #1c2028 !important;
+    color: #69daff !important;
 }
 
 /* Button */
