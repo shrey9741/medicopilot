@@ -342,7 +342,7 @@ if run_btn:
         response = httpx.post(
             f"{API_BASE}/invoke",
             json={"patient_id": patient_id, "sharp_token": "demo", "fhir_token": "demo"},
-            timeout=120.0
+            timeout=180.0
         )
         response.raise_for_status()
         st.session_state.data = response.json()
