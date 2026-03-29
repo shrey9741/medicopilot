@@ -1,29 +1,42 @@
 # 🏥 MediCopilot — AI Clinical Copilot
 
-> **A2A-powered pre-visit patient briefing system built for the Prompt Opinion Healthcare AI Hackathon**
+> A2A-powered pre-visit patient briefing system built for the Prompt Opinion Healthcare AI Hackathon
 
-[![Python](https://img.shields.io/badge/Python-3.11-blue)](https://python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-latest-green)](https://fastapi.tiangolo.com)
-[![Streamlit](https://img.shields.io/badge/Streamlit-latest-red)](https://streamlit.io)
-[![Groq](https://img.shields.io/badge/LLM-Groq%20Llama%203.1-orange)](https://groq.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.11+-blue?style=flat&logo=python)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.36-ff4b4b?style=flat&logo=streamlit)](https://streamlit.io)
+[![Groq](https://img.shields.io/badge/Groq-LLaMA_3.1-orange?style=flat)](https://groq.com)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Streamlit-ff4b4b?style=flat&logo=streamlit)](https://medicopilot-swrq8wx29e4obrraeuamku.streamlit.app)
+[![Backend](https://img.shields.io/badge/Backend-Render-46E3B7?style=flat&logo=render)](https://medicopilot.onrender.com/health)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat)](LICENSE)
 
 ---
 
 ## 📌 The Problem
 
-Doctors waste **8–15 minutes per patient** reviewing scattered chart data before each visit — conditions, medications, recent labs, vitals, interaction risks. This time pressure leads to missed findings and rushed decisions.
+Doctors waste 8–15 minutes per patient reviewing scattered chart data before each visit — conditions, medications, recent labs, vitals, interaction risks. This time pressure leads to missed findings and rushed decisions.
 
 ## 💡 The Solution
 
-MediCopilot is an intelligent A2A agent that generates a **structured 60-second clinical briefing** before the doctor walks in. It reads FHIR patient data, runs it through 9 specialized AI sub-agents, and delivers a complete pre-visit report with differential diagnosis, drug safety alerts, risk scores, and a ready-to-file SOAP note.
+MediCopilot is an intelligent A2A agent that generates a structured 60-second clinical briefing before the doctor walks in. It reads FHIR patient data, runs it through 9 specialized AI sub-agents, and delivers a complete pre-visit report with differential diagnosis, drug safety alerts, risk scores, and a ready-to-file SOAP note.
+
+---
+
+## 🌐 Live Links
+
+| Service | URL |
+|---|---|
+| 🖥️ Frontend (Streamlit) | https://medicopilot-swrq8wx29e4obrraeuamku.streamlit.app |
+| ⚙️ Backend API (Render) | https://medicopilot.onrender.com |
+| 📋 API Docs (Swagger) | https://medicopilot.onrender.com/docs |
+| ❤️ Health Check | https://medicopilot.onrender.com/health |
 
 ---
 
 ## ✨ Features
 
 | Feature | Description |
-|---------|-------------|
+|---|---|
 | **Vital Anomaly Detection** | Rule-based pre-LLM check — flags URGENT/CRITICAL vitals instantly |
 | **Temporal Patient Memory** | Tracks glucose, BP, HR trends across visits — detects worsening patterns |
 | **RAG Medical Knowledge** | FAISS vectorstore with WHO/ADA/ACC/JNC guidelines — cited in every output |
@@ -59,31 +72,31 @@ Clinician / EHR Session (SHARP Context + Patient ID)
 ### The 9 Agents
 
 | Agent | Role |
-|-------|------|
-| `FHIRAgent` | Fetches patient bundle from FHIR R4 server |
-| `MemoryAgent` | Analyzes visit history for clinical trends |
-| `AnomalyDetector` | Rule-based vital sign anomaly detection (runs before LLM) |
-| `RAGAgent` | Retrieves relevant medical guidelines from FAISS |
-| `DiagnosisAgent` | Generates differential diagnosis with confidence scores |
-| `DrugSafetyAgent` | Checks medication interactions and contraindications |
-| `RiskScoringAgent` | Calculates risk percentages using Framingham/ACC guidelines |
-| `SecondOpinionAgent` | Challenges primary diagnosis for balanced assessment |
-| `SOAPNoteGenerator` | Synthesizes all outputs into clinical documentation |
+|---|---|
+| FHIRAgent | Fetches patient bundle from FHIR R4 server |
+| MemoryAgent | Analyzes visit history for clinical trends |
+| AnomalyDetector | Rule-based vital sign anomaly detection (runs before LLM) |
+| RAGAgent | Retrieves relevant medical guidelines from FAISS |
+| DiagnosisAgent | Generates differential diagnosis with confidence scores |
+| DrugSafetyAgent | Checks medication interactions and contraindications |
+| RiskScoringAgent | Calculates risk percentages using Framingham/ACC guidelines |
+| SecondOpinionAgent | Challenges primary diagnosis for balanced assessment |
+| SOAPNoteGenerator | Synthesizes all outputs into clinical documentation |
 
 ---
 
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
+|---|---|
 | **LLM** | Groq API — `llama-3.1-8b-instant` |
-| **RAG** | LangChain + FAISS + TF-IDF embeddings |
+| **RAG** | LangChain + FAISS + TF-IDF embeddings (sklearn) |
 | **Backend** | FastAPI + Uvicorn |
-| **Frontend** | Streamlit (light/dark mode toggle) |
-| **FHIR** | Simulated FHIR R4 patient bundles |
+| **Frontend** | Streamlit — "Clinical Luminary" dark UI |
+| **FHIR** | Simulated FHIR R4 patient bundles (13 patients) |
 | **Platform** | Prompt Opinion A2A (COIN protocol) |
 | **Backend Deploy** | Render (free tier) |
-| **Frontend Deploy** | Streamlit Cloud (free tier) |
+| **Frontend Deploy** | Streamlit Community Cloud (free tier) |
 
 ---
 
@@ -92,17 +105,18 @@ Clinician / EHR Session (SHARP Context + Patient ID)
 ```
 medicopilot/
 ├── main.py                      # FastAPI app — /invoke, /.well-known/agent.json
-├── app.py                       # Streamlit UI with light/dark toggle
+├── app.py                       # Streamlit UI — Clinical Luminary dark theme
 ├── agent_card.json              # Prompt Opinion Marketplace registration
 ├── requirements.txt
 ├── render.yaml                  # Render deployment config
 ├── Procfile                     # Process file for deployment
+├── test_local.py                # 27-check pre-flight test suite
 ├── models/
 │   └── schemas.py               # All Pydantic data models
 ├── fhir/
-│   └── mock_client.py           # Simulated FHIR R4 patient bundles
+│   └── mock_client.py           # Simulated FHIR R4 — 13 patients across 4 categories
 ├── rag/
-│   └── retriever.py             # FAISS vectorstore + medical guidelines
+│   └── retriever.py             # FAISS vectorstore + TF-IDF medical guidelines
 └── agents/
     ├── orchestrator.py          # Main pipeline — coordinates all 9 agents
     ├── anomaly_detector.py      # Rule-based vital sign checks
@@ -127,7 +141,7 @@ medicopilot/
 ```bash
 # 1. Clone the repository
 git clone https://github.com/shrey9741/medicopilot.git
-cd medicopilot
+cd medicopilot/medicopilot
 
 # 2. Create virtual environment
 python -m venv venv
@@ -145,7 +159,7 @@ pip install -r requirements.txt
 cp .env.example .env
 # Edit .env and add your GROQ_API_KEY
 
-# 5. Run pre-flight tests
+# 5. Run pre-flight tests (should show 27/27 checks passed)
 python test_local.py
 
 # 6. Start the backend (Terminal 1)
@@ -158,17 +172,17 @@ streamlit run app.py
 ### Verify Installation
 
 | URL | Expected Response |
-|-----|------------------|
-| `http://localhost:8000/health` | `{"status": "ok"}` |
-| `http://localhost:8000/.well-known/agent.json` | Agent card JSON |
-| `http://localhost:8000/patients` | List of demo patients |
-| `http://localhost:8501` | Streamlit UI |
+|---|---|
+| http://localhost:8000/health | `{"status": "ok"}` |
+| http://localhost:8000/.well-known/agent.json | Agent card JSON |
+| http://localhost:8000/patients | List of 13 demo patients |
+| http://localhost:8501 | Streamlit Clinical Luminary UI |
 
 ---
 
 ## 🔌 API Reference
 
-### `POST /invoke`
+### POST /invoke
 
 Main A2A endpoint. Accepts patient ID and optional SHARP context.
 
@@ -212,28 +226,48 @@ Main A2A endpoint. Accepts patient ID and optional SHARP context.
   "reasoning_trace": [...],
   "rag_citations": [...],
   "memory_trend": "Glucose trend: 195 → 202 → 210 mg/dL (worsening, Δ+15)",
-  "generated_at": "2026-03-25T10:30:00"
+  "generated_at": "2026-03-29T00:00:00"
 }
 ```
-
-### `GET /.well-known/agent.json`
-Returns the A2A agent card for Prompt Opinion Marketplace registration.
-
-### `GET /health`
-Health check endpoint.
-
-### `GET /patients`
-Returns list of available demo patients.
 
 ---
 
 ## 👥 Demo Patients
 
-| ID | Name | Age | Conditions |
-|----|------|-----|-----------|
-| P001 | John Doe | 62M | Type 2 Diabetes, Hypertension, CKD Stage 2 |
-| P002 | Sarah Chen | 45F | Atrial Fibrillation, Hypothyroidism, Obesity |
-| P003 | Marcus Johnson | 71M | COPD, Heart Failure (EF 35%), T2 Diabetes |
+13 mock patients across 4 clinical categories:
+
+### General Medicine
+| ID | Name | Conditions |
+|---|---|---|
+| P001 | John Doe, 62M | Type 2 Diabetes, Hypertension, CKD Stage 2 |
+| P002 | Sarah Chen, 45F | Atrial Fibrillation, Hypothyroidism, Obesity |
+| P003 | Marcus Johnson, 71M | COPD, Heart Failure (EF 35%), T2 Diabetes |
+
+### Oncology
+| ID | Name | Conditions |
+|---|---|---|
+| P004 | Patricia Williams, 54F | Stage III Breast Cancer (HER2+), Anemia |
+| P005 | Robert Nguyen, 67M | Stage IV Lung Cancer, COPD, Cachexia |
+
+### Pediatric
+| ID | Name | Conditions |
+|---|---|---|
+| P006 | Aiden Patel, 8M | Type 1 Diabetes, Asthma (Moderate Persistent), ADHD |
+| P007 | Lily Thompson, 5F | ALL Leukemia (Maintenance Phase), Immunosuppression |
+
+### Mental Health
+| ID | Name | Conditions |
+|---|---|---|
+| P008 | Diana Foster, 34F | Bipolar I Disorder, Generalized Anxiety, Hypothyroidism |
+| P009 | Carlos Rivera, 28M | Schizophrenia, Substance Use Disorder, Metabolic Syndrome |
+
+### Rare & Complex Diseases
+| ID | Name | Conditions |
+|---|---|---|
+| P010 | Eleanor Voss, 41F | Systemic Lupus Erythematosus, Lupus Nephritis, Antiphospholipid Syndrome |
+| P011 | Samuel Okafor, 19M | Cystic Fibrosis (F508del), CF-related Diabetes, Chronic Pseudomonas |
+| P012 | Ingrid Larsson, 37F | Multiple Sclerosis (RRMS), Neurogenic Bladder, Major Depression |
+| P013 | Theo Blackwood, 52M | ALS, Respiratory Insufficiency, Dysphagia |
 
 ---
 
@@ -265,14 +299,15 @@ The `fhir_token` is used as a Bearer token for FHIR R4 API calls. In the current
 # GROQ_API_KEY = your_groq_key
 ```
 
-Live backend: `https://medicopilot.onrender.com`
+Live backend: https://medicopilot.onrender.com
 
-### Frontend → Streamlit Cloud
+### Frontend → Streamlit Community Cloud
 
 1. Go to [share.streamlit.io](https://share.streamlit.io)
 2. Connect `shrey9741/medicopilot` repo
-3. Set main file: `app.py`
+3. Set main file: `medicopilot/app.py`
 4. Add secrets:
+
 ```toml
 GROQ_API_KEY = "your_key"
 API_BASE = "https://medicopilot.onrender.com"
@@ -280,7 +315,7 @@ API_BASE = "https://medicopilot.onrender.com"
 
 ### Prompt Opinion Marketplace
 
-Register the agent at Prompt Opinion using the agent card URL:
+Register the agent using the agent card URL:
 ```
 https://medicopilot.onrender.com/.well-known/agent.json
 ```
@@ -294,7 +329,7 @@ https://medicopilot.onrender.com/.well-known/agent.json
 python test_local.py
 ```
 
-The test suite covers environment setup, all module imports, FHIR mock data, anomaly detector, temporal memory, RAG vectorstore, Groq API connectivity, and the full end-to-end orchestrator pipeline.
+The test suite covers: environment setup, all module imports, FHIR mock data, anomaly detector, temporal memory, RAG vectorstore, Groq API connectivity, and the full end-to-end orchestrator pipeline.
 
 ---
 
@@ -359,4 +394,4 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-> Built for the **Prompt Opinion Healthcare AI Hackathon** · Powered by Groq · FHIR R4 Ready · A2A Compatible
+> Built for the Prompt Opinion Healthcare AI Hackathon · Powered by Groq · FHIR R4 Ready · A2A Compatible
