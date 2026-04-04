@@ -48,49 +48,28 @@ app.add_middleware(
 
 @app.get("/.well-known/agent.json")
 async def agent_card():
-    """
-    A2A Agent Card — required by Prompt Opinion for Marketplace registration.
-    SHARP context fields signal FHIR integration capability.
-    """
     return {
         "name": "MediCopilot",
+        "description": "AI Clinical Copilot — pre-visit patient briefing with multi-agent reasoning, drug safety, risk scoring and SOAP notes.",
+        "url": "https://medicopilot.onrender.com",
         "version": "1.0.0",
-        "description": "AI Clinical Copilot that generates structured pre-visit patient briefings using FHIR data, multi-agent reasoning, RAG medical knowledge, and SOAP note generation.",
-        "author": "MediCopilot Team",
-        "capabilities": [
-            "clinical_summary",
-            "differential_diagnosis",
-            "drug_interaction_check",
-            "risk_scoring",
-            "soap_note_generation",
-            "second_opinion",
-            "temporal_memory",
-            "vital_anomaly_detection",
-            "rag_medical_knowledge"
-        ],
-        "sharp_context": {
-            "patient_id": {
-                "required": True,
-                "description": "FHIR Patient resource ID"
-            },
-            "fhir_token": {
-                "required": False,
-                "description": "Bearer token for FHIR R4 server access"
-            },
-            "sharp_token": {
-                "required": False,
-                "description": "SHARP session token from EHR"
+        "capabilities": {
+            "streaming": False,
+            "pushNotifications": False
+        },
+        "defaultInputModes": ["text"],
+        "defaultOutputModes": ["text"],
+        "skills": [
+            {
+                "id": "clinical_briefing",
+                "name": "Clinical Briefing",
+                "description": "Generates pre-visit patient briefing from FHIR data including DDx, drug safety, risk scores and SOAP note",
+                "inputModes": ["text"],
+                "outputModes": ["text"],
+                "examples": ["Generate briefing for patient P001"]
             }
-        },
-        "invoke_endpoint": "/invoke",
-        "input_schema": {
-            "patient_id": "string",
-            "sharp_token": "string (optional)",
-            "fhir_token": "string (optional)"
-        },
-        "output_schema": "MediCopilotResponse — structured clinical briefing with DDx, drug safety, risk scores, SOAP note, and reasoning trace"
+        ]
     }
-
 
 @app.post("/invoke", response_model=MediCopilotResponse)
 async def invoke(request: InvokeRequest):
