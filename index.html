@@ -8,1214 +8,707 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        "colors": {
-          "outline": "#737783",
-          "on-primary-container": "#a1bbff",
-          "surface-dim": "#d8dadc",
-          "inverse-surface": "#2d3133",
-          "surface-container-lowest": "#ffffff",
-          "surface-container-high": "#e6e8ea",
-          "background": "#f8f9fb",
-          "on-primary": "#ffffff",
-          "surface-bright": "#f8f9fb",
-          "on-secondary": "#ffffff",
-          "on-error": "#ffffff",
-          "outline-variant": "#c3c6d4",
-          "primary": "#003178",
-          "surface-container": "#eceef0",
-          "secondary-container": "#cbe7f5",
-          "on-background": "#191c1e",
-          "inverse-on-surface": "#eff1f3",
-          "error-container": "#ffdad6",
-          "secondary": "#48626e",
-          "on-primary-fixed-variant": "#00429c",
-          "on-primary-fixed": "#001945",
-          "tertiary-container": "#853100",
-          "on-surface": "#191c1e",
-          "on-secondary-fixed": "#021f29",
-          "surface-tint": "#2b5bb5",
-          "on-tertiary-container": "#ffa781",
-          "on-error-container": "#93000a",
-          "on-secondary-fixed-variant": "#304a55",
-          "secondary-fixed-dim": "#afcbd8",
-          "primary-fixed": "#d9e2ff",
-          "surface": "#f8f9fb",
-          "on-surface-variant": "#434652",
-          "inverse-primary": "#b0c6ff",
-          "surface-container-highest": "#e0e3e5",
-          "primary-fixed-dim": "#b0c6ff",
-          "secondary-fixed": "#cbe7f5",
-          "on-tertiary": "#ffffff",
-          "surface-container-low": "#f2f4f6",
-          "tertiary": "#602100",
-          "surface-variant": "#e0e3e5",
-          "on-secondary-container": "#4e6874",
-          "primary-container": "#0d47a1",
-          "error": "#ba1a1a"
-        },
-        "borderRadius": {
-          "DEFAULT": "0.125rem",
-          "lg": "0.25rem",
-          "xl": "0.5rem",
-          "full": "0.75rem"
-        },
-        "fontFamily": {
-          "headline": ["Manrope"],
-          "body": ["Inter"],
-          "label": ["Inter"]
-        }
-      }
-    }
-  }
+tailwind.config = {
+  darkMode:"class",
+  theme:{extend:{"colors":{"outline":"#737783","on-primary-container":"#a1bbff","surface-container-lowest":"#ffffff","surface-container-high":"#e6e8ea","background":"#f8f9fb","on-primary":"#ffffff","outline-variant":"#c3c6d4","primary":"#003178","surface-container":"#eceef0","secondary-container":"#cbe7f5","on-background":"#191c1e","inverse-on-surface":"#eff1f3","error-container":"#ffdad6","secondary":"#48626e","on-primary-fixed-variant":"#00429c","on-primary-fixed":"#001945","on-surface":"#191c1e","on-secondary-fixed":"#021f29","on-secondary-fixed-variant":"#304a55","secondary-fixed-dim":"#afcbd8","primary-fixed":"#d9e2ff","surface":"#f8f9fb","on-surface-variant":"#434652","inverse-primary":"#b0c6ff","surface-container-highest":"#e0e3e5","primary-fixed-dim":"#b0c6ff","secondary-fixed":"#cbe7f5","surface-container-low":"#f2f4f6","surface-variant":"#e0e3e5","on-secondary-container":"#4e6874","primary-container":"#0d47a1","error":"#ba1a1a"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"fontFamily":{"headline":["Manrope"],"body":["Inter"],"label":["Inter"]}}}
+}
 </script>
 <style>
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
-  body { font-family: 'Inter', sans-serif; }
-  h1, h2, h3, .brand-font { font-family: 'Manrope', sans-serif; }
-  .page { display: none; }
-  .page.active { display: block; }
-  .nav-item.active { color: #003178; font-weight: 700; border-right: 2px solid #003178; background: rgba(148,163,184,0.1); }
-  .nav-item { transition: all 0.15s ease; }
-  .page-transition { animation: fadeIn 0.2s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;vertical-align:middle}
+  body{font-family:'Inter',sans-serif}
+  h1,h2,h3{font-family:'Manrope',sans-serif}
+  .page{display:none}
+  .page.active{display:block}
+  .nav-item.active{color:#003178!important;font-weight:700;border-right:2px solid #003178;background:rgba(148,163,184,0.15)}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .fade-in{animation:fadeIn 0.2s ease}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .spinner{animation:spin 0.8s linear infinite}
+  .patient-btn.selected{background:#003178!important;color:white!important;border-color:#003178!important}
+  .conf-bar,.risk-bar{transition:width 0.8s ease}
+  .patient-btns-wrap{display:flex;flex-wrap:wrap;gap:6px;max-height:120px;overflow-y:auto;padding:4px 0}
 </style>
 </head>
 <body class="bg-background text-on-background">
 
 <!-- SIDEBAR -->
-<aside class="fixed left-0 top-0 h-full flex flex-col z-40 bg-slate-50/90 backdrop-blur-xl w-64 border-r border-slate-200/60">
-  <div class="p-6">
-    <div class="flex items-center gap-2 mb-1">
+<aside class="fixed left-0 top-0 h-full flex flex-col z-40 bg-white border-r border-slate-200 w-64">
+  <div class="p-5 border-b border-slate-100">
+    <div class="flex items-center gap-2">
       <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings:'FILL' 1">local_hospital</span>
       <div>
-        <div class="text-lg font-bold tracking-tight text-blue-900">MediCopilot</div>
-        <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">AI Clinical Copilot</div>
+        <div class="text-base font-black text-blue-900">MediCopilot</div>
+        <div class="text-[9px] uppercase tracking-widest text-slate-400 font-bold">AI Clinical Copilot</div>
       </div>
     </div>
   </div>
-  <nav class="flex-1 px-4 space-y-1">
-    <a class="nav-item active flex items-center px-4 py-3 rounded-lg cursor-pointer" onclick="showPage('dashboard')">
-      <span class="material-symbols-outlined mr-3" style="font-variation-settings:'FILL' 1">dashboard</span>
-      <span class="text-sm">Dashboard</span>
+  <nav class="flex-1 px-3 py-4 space-y-1">
+    <a class="nav-item active flex items-center px-3 py-2.5 rounded-lg cursor-pointer text-slate-600 text-sm" onclick="showPage('dashboard')">
+      <span class="material-symbols-outlined mr-3 text-lg">dashboard</span>Dashboard
     </a>
-    <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-blue-600 hover:bg-slate-200/50 rounded-lg cursor-pointer transition-colors" onclick="showPage('briefing')">
-      <span class="material-symbols-outlined mr-3">assignment_ind</span>
-      <span class="text-sm">Patient Briefing</span>
+    <a class="nav-item flex items-center px-3 py-2.5 text-slate-500 hover:text-blue-600 hover:bg-slate-100 rounded-lg cursor-pointer transition-colors text-sm" onclick="showPage('briefing')">
+      <span class="material-symbols-outlined mr-3 text-lg">assignment_ind</span>Patient Briefing
     </a>
-    <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-blue-600 hover:bg-slate-200/50 rounded-lg cursor-pointer transition-colors" onclick="showPage('soap')">
-      <span class="material-symbols-outlined mr-3">history_edu</span>
-      <span class="text-sm">SOAP Generator</span>
+    <a class="nav-item flex items-center px-3 py-2.5 text-slate-500 hover:text-blue-600 hover:bg-slate-100 rounded-lg cursor-pointer transition-colors text-sm" onclick="showPage('soap')">
+      <span class="material-symbols-outlined mr-3 text-lg">history_edu</span>SOAP Generator
     </a>
-    <a class="nav-item flex items-center px-4 py-3 text-slate-500 hover:text-blue-600 hover:bg-slate-200/50 rounded-lg cursor-pointer transition-colors" onclick="showPage('agents')">
-      <span class="material-symbols-outlined mr-3">smart_toy</span>
-      <span class="text-sm">Agent Status</span>
+    <a class="nav-item flex items-center px-3 py-2.5 text-slate-500 hover:text-blue-600 hover:bg-slate-100 rounded-lg cursor-pointer transition-colors text-sm" onclick="showPage('agents')">
+      <span class="material-symbols-outlined mr-3 text-lg">smart_toy</span>Agent Status
     </a>
   </nav>
   <div class="p-4 border-t border-slate-100">
-    <button class="w-full py-2.5 px-4 bg-primary text-on-primary text-sm font-semibold rounded-xl flex items-center justify-center gap-2 mb-6 hover:bg-blue-800 transition-colors">
-      <span class="material-symbols-outlined text-lg">add</span>
-      New Consultation
+    <button onclick="showPage('briefing')" class="w-full py-2.5 px-4 bg-primary text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2 mb-4 hover:bg-blue-800 transition-colors">
+      <span class="material-symbols-outlined text-lg">add</span>New Consultation
     </button>
-    <div class="space-y-1">
-      <a class="flex items-center px-4 py-2 text-slate-500 text-sm hover:text-blue-600 transition-colors cursor-pointer">
-        <span class="material-symbols-outlined mr-3 text-lg">settings</span>Settings
-      </a>
-      <a class="flex items-center px-4 py-2 text-slate-500 text-sm hover:text-blue-600 transition-colors cursor-pointer">
-        <span class="material-symbols-outlined mr-3 text-lg">help_outline</span>Support
-      </a>
-    </div>
-    <div class="mt-6 flex items-center px-4 gap-3">
-      <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white text-xs font-bold">JT</div>
-      <div>
-        <p class="text-xs font-bold text-on-surface">Dr. Julian Thorne</p>
-        <p class="text-[10px] text-on-surface-variant">Chief Medical Officer</p>
+    <div class="flex items-center gap-3 px-2">
+      <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold flex-shrink-0">JT</div>
+      <div class="overflow-hidden">
+        <p class="text-xs font-bold text-on-surface truncate">Dr. Julian Thorne</p>
+        <p class="text-[10px] text-on-surface-variant truncate">Chief Medical Officer</p>
       </div>
     </div>
   </div>
 </aside>
 
 <!-- TOPBAR -->
-<header class="fixed top-0 right-0 left-64 h-16 flex items-center px-8 z-30 bg-white/80 backdrop-blur-xl shadow-sm">
-  <div class="flex-1 flex items-center">
-    <h2 class="text-lg font-black text-blue-900 mr-8">MediCopilot</h2>
-    <nav class="hidden md:flex gap-6">
-      <a class="text-sm font-semibold text-blue-900 border-b-2 border-blue-900 py-5 cursor-pointer">Active Cases</a>
-      <a class="text-sm font-semibold text-slate-500 hover:text-blue-700 py-5 transition-colors cursor-pointer">Alerts</a>
-    </nav>
+<header class="fixed top-0 right-0 left-64 h-14 flex items-center px-6 z-30 bg-white border-b border-slate-200">
+  <div class="flex-1 flex items-center gap-6">
+    <h2 class="text-base font-black text-blue-900">MediCopilot</h2>
+    <div class="flex items-center gap-2 text-xs">
+      <span class="w-2 h-2 rounded-full bg-slate-300" id="status-dot"></span>
+      <span id="status-text" class="text-slate-400">Connecting...</span>
+    </div>
   </div>
-  <div class="flex items-center gap-4">
+  <div class="flex items-center gap-3">
     <div class="relative">
       <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-sm">search</span>
-      <input class="pl-10 pr-4 py-1.5 bg-slate-100 border-none rounded-lg text-sm w-56 focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Search patients..." type="text"/>
+      <input class="pl-9 pr-4 py-1.5 bg-slate-100 rounded-lg text-sm w-48 focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Search patients..."/>
     </div>
-    <button class="px-4 py-1.5 bg-error text-on-error text-xs font-bold rounded-lg uppercase tracking-wider hover:bg-red-700 transition-colors">
-      Emergency Mode
-    </button>
-    <span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary transition-colors">notifications_active</span>
-    <span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary transition-colors">account_circle</span>
+    <button class="px-3 py-1.5 bg-error text-white text-xs font-bold rounded-lg uppercase tracking-wider">Emergency Mode</button>
+    <span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-primary">notifications</span>
+    <span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-primary">account_circle</span>
   </div>
 </header>
 
-<!-- MAIN PAGES -->
-<main class="pl-64 pt-16 min-h-screen">
+<!-- PAGES -->
+<main class="pl-64 pt-14 min-h-screen">
 
-  <!-- PAGE 1: DASHBOARD -->
-  <div id="page-dashboard" class="page active page-transition">
+  <!-- DASHBOARD -->
+  <div id="page-dashboard" class="page active fade-in p-6">
+    <div class="flex justify-between items-end mb-6">
+      <div>
+        <p class="text-sm text-on-surface-variant mb-1" id="dash-date"></p>
+        <h1 class="text-2xl font-extrabold text-on-surface">Clinical Dashboard</h1>
+      </div>
+      <div class="flex gap-3">
+        <div class="bg-surface-container-low px-3 py-2 rounded-lg flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-green-500"></span>
+          <span class="text-xs font-bold">13 Patients Today</span>
+        </div>
+        <div class="bg-surface-container-low px-3 py-2 rounded-lg flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm text-primary">schedule</span>
+          <span class="text-xs font-bold">Next: 08:00 AM</span>
+        </div>
+      </div>
+    </div>
 
-<div class="p-8 grid grid-cols-12 gap-8">
-<!-- Dashboard Header Section -->
-<section class="col-span-12 flex justify-between items-end mb-2">
-<div>
-<p class="label-md text-on-surface-variant font-medium mb-1">Monday, Oct 24, 2023</p>
-<h1 class="text-3xl font-extrabold text-on-surface tracking-tight">Clinical Dashboard</h1>
-</div>
-<div class="flex gap-3">
-<div class="bg-surface-container-low px-4 py-2 rounded-lg flex items-center gap-2">
-<span class="w-2 h-2 rounded-full bg-green-500"></span>
-<span class="text-xs font-bold text-on-surface">12 Patients Today</span>
-</div>
-<div class="bg-surface-container-low px-4 py-2 rounded-lg flex items-center gap-2">
-<span class="material-symbols-outlined text-sm text-primary" data-icon="schedule">schedule</span>
-<span class="text-xs font-bold text-on-surface">Next: 09:30 AM</span>
-</div>
-</div>
-</section>
-<!-- Main Patient Grid -->
-<section class="col-span-12 lg:col-span-9 space-y-6">
-<!-- Filters & Views -->
-<div class="flex items-center justify-between bg-surface-container-low p-2 rounded-xl">
-<div class="flex gap-1">
-<button class="px-4 py-1.5 bg-surface-container-lowest text-primary text-xs font-bold rounded-lg shadow-sm">All Appointments</button>
-<button class="px-4 py-1.5 text-on-surface-variant text-xs font-semibold rounded-lg hover:bg-surface-container-highest transition-colors">Critical Only</button>
-<button class="px-4 py-1.5 text-on-surface-variant text-xs font-semibold rounded-lg hover:bg-surface-container-highest transition-colors">Completed</button>
-</div>
-<div class="flex gap-4 px-4">
-<span class="material-symbols-outlined text-on-surface-variant text-xl cursor-pointer" data-icon="filter_list">filter_list</span>
-<span class="material-symbols-outlined text-on-surface-variant text-xl cursor-pointer" data-icon="view_agenda">view_agenda</span>
-</div>
-</div>
-<!-- High-Density Grid -->
-<div class="bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant/10">
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-surface-container-low/50">
-<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Time / Patient</th>
-<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Condition &amp; Vitals</th>
-<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Copilot Status</th>
-<th class="px-6 py-4 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-surface-container">
-<!-- Row 1 -->
-<tr class="hover:bg-surface-container-low/30 transition-colors group">
-<td class="px-6 py-5">
-<div class="flex items-center gap-4">
-<span class="text-xs font-bold text-primary bg-primary-fixed px-2 py-1 rounded">08:15</span>
-<div>
-<p class="text-sm font-bold text-on-surface">Elena Rodriguez</p>
-<p class="text-[11px] text-on-surface-variant">ID: #MS-9920 • F, 64y</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-5">
-<div class="flex flex-col gap-1">
-<p class="text-xs font-medium text-on-surface">Post-Op Cardiology Follow-up</p>
-<div class="flex gap-2">
-<span class="text-[10px] font-bold text-red-600 flex items-center gap-0.5">
-<span class="material-symbols-outlined text-[12px]" data-icon="favorite">favorite</span> 112 bpm
-                                            </span>
-<span class="text-[10px] font-bold text-on-secondary-fixed-variant">138/88 mmHg</span>
-</div>
-</div>
-</td>
-<td class="px-6 py-5">
-<div class="flex gap-2">
-<span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-black border border-blue-100 flex items-center gap-1">
-<span class="material-symbols-outlined text-[12px]" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-                                            Briefing Ready
-                                        </span>
-<span class="px-2 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-bold border border-slate-200">
-                                            Chart Review Pending
-                                        </span>
-</div>
-</td>
-<td class="px-6 py-5 text-right">
-<button class="p-2 hover:bg-primary-container/10 rounded-lg transition-colors text-primary">
-<span class="material-symbols-outlined" data-icon="clinical_notes">clinical_notes</span>
-</button>
-<button class="p-2 hover:bg-primary-container/10 rounded-lg transition-colors text-primary">
-<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
-</button>
-</td>
-</tr>
-<!-- Row 2 -->
-<tr class="hover:bg-surface-container-low/30 transition-colors group bg-red-50/20">
-<td class="px-6 py-5">
-<div class="flex items-center gap-4">
-<span class="text-xs font-bold text-error bg-error-container px-2 py-1 rounded">09:00</span>
-<div>
-<p class="text-sm font-bold text-on-surface">Marcus Chen</p>
-<p class="text-[11px] text-on-surface-variant">ID: #MS-4412 • M, 42y</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-5">
-<div class="flex flex-col gap-1">
-<p class="text-xs font-medium text-on-surface">Type 2 Diabetes Management</p>
-<div class="flex gap-2">
-<span class="text-[10px] font-bold text-red-600 flex items-center gap-0.5">
-<span class="material-symbols-outlined text-[12px]" data-icon="blood_pressure">blood_pressure</span> High Glucose
-                                            </span>
-<span class="text-[10px] font-bold text-on-secondary-fixed-variant">A1C: 8.4%</span>
-</div>
-</div>
-</td>
-<td class="px-6 py-5">
-<div class="flex gap-2">
-<span class="px-2 py-1 rounded-full bg-orange-50 text-orange-700 text-[10px] font-black border border-orange-100 flex items-center gap-1">
-<span class="material-symbols-outlined text-[12px]" data-icon="warning">warning</span>
-                                            Anomaly Detected
-                                        </span>
-</div>
-</td>
-<td class="px-6 py-5 text-right">
-<button class="p-2 hover:bg-primary-container/10 rounded-lg transition-colors text-primary">
-<span class="material-symbols-outlined" data-icon="clinical_notes">clinical_notes</span>
-</button>
-<button class="p-2 hover:bg-primary-container/10 rounded-lg transition-colors text-primary">
-<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
-</button>
-</td>
-</tr>
-<!-- Row 3 -->
-<tr class="hover:bg-surface-container-low/30 transition-colors group">
-<td class="px-6 py-5">
-<div class="flex items-center gap-4">
-<span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">09:30</span>
-<div>
-<p class="text-sm font-bold text-on-surface">Sarah Miller</p>
-<p class="text-[11px] text-on-surface-variant">ID: #MS-1102 • F, 29y</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-5">
-<div class="flex flex-col gap-1">
-<p class="text-xs font-medium text-on-surface">Prenatal Check-up (Wk 24)</p>
-<div class="flex gap-2">
-<span class="text-[10px] font-bold text-green-600 flex items-center gap-0.5">
-<span class="material-symbols-outlined text-[12px]" data-icon="check_circle">check_circle</span> All Stable
-                                            </span>
-</div>
-</div>
-</td>
-<td class="px-6 py-5">
-<div class="flex gap-2">
-<span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-black border border-blue-100 flex items-center gap-1">
-<span class="material-symbols-outlined text-[12px]" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-                                            Briefing Ready
-                                        </span>
-</div>
-</td>
-<td class="px-6 py-5 text-right">
-<button class="p-2 hover:bg-primary-container/10 rounded-lg transition-colors text-primary">
-<span class="material-symbols-outlined" data-icon="clinical_notes">clinical_notes</span>
-</button>
-<button class="p-2 hover:bg-primary-container/10 rounded-lg transition-colors text-primary">
-<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
-</button>
-</td>
-</tr>
-<!-- Row 4 -->
-<tr class="hover:bg-surface-container-low/30 transition-colors group">
-<td class="px-6 py-5">
-<div class="flex items-center gap-4">
-<span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">10:15</span>
-<div>
-<p class="text-sm font-bold text-on-surface">James Wilson</p>
-<p class="text-[11px] text-on-surface-variant">ID: #MS-8831 • M, 72y</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-5">
-<div class="flex flex-col gap-1">
-<p class="text-xs font-medium text-on-surface">Chronic Kidney Disease Review</p>
-<div class="flex gap-2">
-<span class="text-[10px] font-bold text-on-secondary-fixed-variant">eGFR: 45</span>
-<span class="text-[10px] font-bold text-on-secondary-fixed-variant">K+: 4.8</span>
-</div>
-</div>
-</td>
-<td class="px-6 py-5">
-<div class="flex gap-2">
-<span class="px-2 py-1 rounded-full bg-surface-container text-on-surface-variant text-[10px] font-bold border border-outline-variant/30">
-                                            Awaiting Intake
-                                        </span>
-</div>
-</td>
-<td class="px-6 py-5 text-right">
-<button class="p-2 hover:bg-primary-container/10 rounded-lg transition-colors text-primary">
-<span class="material-symbols-outlined" data-icon="clinical_notes">clinical_notes</span>
-</button>
-<button class="p-2 hover:bg-primary-container/10 rounded-lg transition-colors text-primary">
-<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
-</button>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<!-- Pagination/Footer -->
-<div class="flex justify-between items-center px-2">
-<p class="text-xs text-on-surface-variant">Showing 4 of 12 patients scheduled today</p>
-<div class="flex gap-2">
-<button class="p-2 border border-outline-variant/30 rounded hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm" data-icon="keyboard_arrow_left">keyboard_arrow_left</span></button>
-<button class="p-2 border border-outline-variant/30 rounded hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm" data-icon="keyboard_arrow_right">keyboard_arrow_right</span></button>
-</div>
-</div>
-</section>
-<!-- Quick Insights Sidebar -->
-<section class="col-span-12 lg:col-span-3 space-y-6">
-<!-- AI Summary Card -->
-<div class="bg-primary-container text-white p-6 rounded-xl shadow-lg relative overflow-hidden">
-<div class="relative z-10">
-<div class="flex items-center gap-2 mb-4">
-<span class="material-symbols-outlined text-on-primary-container" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
-<span class="text-[10px] font-black uppercase tracking-widest text-on-primary-container">MediCopilot AI</span>
-</div>
-<h3 class="headline-sm font-bold mb-2">Afternoon Outlook</h3>
-<p class="text-xs text-on-primary-container leading-relaxed mb-4">
-                            3 lab results returned high for diabetes management patients. Schedule is 10 min behind but clearing after Sarah Miller.
-                        </p>
-<div class="flex items-center gap-3 bg-white/10 p-3 rounded-lg backdrop-blur-sm">
-<span class="material-symbols-outlined text-yellow-300" data-icon="lightbulb" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
-<span class="text-[11px] font-medium">Review Marcus Chen's latest A1C before 09:00 consultation.</span>
-</div>
-</div>
-<!-- Decorative gradient mesh -->
-<div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
-<div class="absolute bottom-0 left-0 w-24 h-24 bg-blue-400/20 rounded-full -ml-12 -mb-12 blur-2xl"></div>
-</div>
-<!-- Top Alerts Sidebar Section -->
-<div class="bg-surface-container-low p-6 rounded-xl space-y-4">
-<h3 class="text-sm font-black uppercase tracking-tight text-on-surface mb-2 flex items-center justify-between">
-                        Top Alerts
-                        <span class="bg-error text-on-error text-[10px] px-2 py-0.5 rounded-full">3</span>
-</h3>
-<div class="space-y-3">
-<!-- Alert 1 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-error shadow-sm">
-<div class="flex justify-between items-start mb-1">
-<span class="text-[10px] font-bold text-error uppercase">Urgent Lab</span>
-<span class="text-[10px] text-on-surface-variant">2m ago</span>
-</div>
-<p class="text-xs font-bold text-on-surface mb-1">Potassium Level Critical</p>
-<p class="text-[10px] text-on-surface-variant">Patient: Robert Vance</p>
-</div>
-<!-- Alert 2 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-primary shadow-sm">
-<div class="flex justify-between items-start mb-1">
-<span class="text-[10px] font-bold text-primary uppercase">Medication Conflict</span>
-<span class="text-[10px] text-on-surface-variant">15m ago</span>
-</div>
-<p class="text-xs font-bold text-on-surface mb-1">Warfarin vs. New Script</p>
-<p class="text-[10px] text-on-surface-variant">Patient: Elena Rodriguez</p>
-</div>
-<!-- Alert 3 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-secondary-fixed-variant shadow-sm">
-<div class="flex justify-between items-start mb-1">
-<span class="text-[10px] font-bold text-on-secondary-fixed-variant uppercase">Admin</span>
-<span class="text-[10px] text-on-surface-variant">1h ago</span>
-</div>
-<p class="text-xs font-bold text-on-surface mb-1">Prior Auth Required</p>
-<p class="text-[10px] text-on-surface-variant">Scan requested for Sarah Miller</p>
-</div>
-</div>
-<button class="w-full py-2 text-[11px] font-bold text-primary hover:bg-primary-fixed rounded transition-colors uppercase tracking-widest mt-2">
-                        View All Activity
-                    </button>
-</div>
-<!-- Recent Dictations Card (Bento Style) -->
-<div class="bg-surface-container-high p-6 rounded-xl">
-<h3 class="text-sm font-black uppercase tracking-tight text-on-surface mb-4">SOAP Queue</h3>
-<div class="space-y-4">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary">
-<span class="material-symbols-outlined" data-icon="mic">mic</span>
-</div>
-<div class="flex-1">
-<p class="text-xs font-bold text-on-surface">Physical Exam - Miller</p>
-<div class="w-full bg-slate-200 h-1.5 rounded-full mt-1 overflow-hidden">
-<div class="bg-primary h-full w-[85%] rounded-full"></div>
-</div>
-</div>
-<span class="text-[10px] font-bold text-on-surface-variant">85%</span>
-</div>
-<div class="flex items-center gap-3 opacity-60">
-<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center text-on-surface-variant">
-<span class="material-symbols-outlined" data-icon="description">description</span>
-</div>
-<div class="flex-1">
-<p class="text-xs font-bold text-on-surface">Discharge Summary</p>
-<p class="text-[10px]">Queued for processing...</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-</div>
+    <!-- Filter tabs -->
+    <div class="flex items-center gap-2 mb-4">
+      <button class="px-4 py-1.5 bg-primary text-white text-xs font-bold rounded-lg">All Patients</button>
+      <button class="px-4 py-1.5 bg-surface-container text-on-surface-variant text-xs font-semibold rounded-lg hover:bg-surface-container-high transition-colors">Critical Only</button>
+      <button class="px-4 py-1.5 bg-surface-container text-on-surface-variant text-xs font-semibold rounded-lg hover:bg-surface-container-high transition-colors">Completed</button>
+    </div>
 
+    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="bg-slate-50 border-b border-slate-100">
+            <th class="px-6 py-3 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Time / Patient</th>
+            <th class="px-6 py-3 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Conditions</th>
+            <th class="px-6 py-3 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">08:00</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">John Doe</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P001 · 62M</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">T2 Diabetes · Hypertension · CKD</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-orange-50 text-orange-700 text-[10px] font-black border border-orange-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">warning</span>Anomaly Detected</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P001', 'John Doe')" class="bg-primary hover:bg-blue-800 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-primary bg-primary-fixed px-2 py-1 rounded">08:30</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Sarah Chen</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P002 · 45F</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">Atrial Fibrillation · Hypothyroidism</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-black border border-blue-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">auto_awesome</span>Briefing Ready</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P002', 'Sarah Chen')" class="bg-primary hover:bg-blue-800 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-error bg-error-container px-2 py-1 rounded">09:00</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Marcus Johnson</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P003 · 71M</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">COPD · Heart Failure · T2 Diabetes</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-red-50 text-red-700 text-[10px] font-black border border-red-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">emergency</span>Critical</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P003', 'Marcus Johnson')" class="bg-error hover:bg-red-700 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-primary bg-primary-fixed px-2 py-1 rounded">09:30</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Patricia Williams</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P004 · 54F</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">Breast Cancer HER2+ · Neuropathy</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-black border border-blue-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">auto_awesome</span>Briefing Ready</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P004', 'Patricia Williams')" class="bg-primary hover:bg-blue-800 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">10:00</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Robert Nguyen</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P005 · 67M</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">Lung Cancer Stage IV · COPD</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-orange-50 text-orange-700 text-[10px] font-black border border-orange-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">warning</span>Anomaly Detected</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P005', 'Robert Nguyen')" class="bg-primary hover:bg-blue-800 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-error bg-error-container px-2 py-1 rounded">10:30</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Aiden Patel</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P006 · 8M</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">T1 Diabetes · Asthma · Celiac Disease</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-red-50 text-red-700 text-[10px] font-black border border-red-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">emergency</span>Critical</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P006', 'Aiden Patel')" class="bg-error hover:bg-red-700 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-error bg-error-container px-2 py-1 rounded">11:00</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Lily Thompson</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P007 · 5F</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">ALL Leukemia · Febrile Neutropenia</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-red-50 text-red-700 text-[10px] font-black border border-red-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">emergency</span>Critical</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P007', 'Lily Thompson')" class="bg-error hover:bg-red-700 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-primary bg-primary-fixed px-2 py-1 rounded">11:30</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Diana Foster</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P008 · 34F</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">Bipolar I · Anxiety · Hypothyroidism</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-black border border-blue-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">auto_awesome</span>Briefing Ready</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P008', 'Diana Foster')" class="bg-primary hover:bg-blue-800 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">12:00</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Carlos Rivera</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P009 · 28M</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">Schizophrenia · Substance Use Disorder</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-orange-50 text-orange-700 text-[10px] font-black border border-orange-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">warning</span>Anomaly Detected</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P009', 'Carlos Rivera')" class="bg-primary hover:bg-blue-800 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">12:30</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Eleanor Voss</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P010 · 41F</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">Lupus · Antiphospholipid Syndrome</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-orange-50 text-orange-700 text-[10px] font-black border border-orange-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">warning</span>Anomaly Detected</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P010', 'Eleanor Voss')" class="bg-primary hover:bg-blue-800 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">13:00</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Samuel Okafor</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P011 · 19M</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">Cystic Fibrosis · CF-related Diabetes</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-orange-50 text-orange-700 text-[10px] font-black border border-orange-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">warning</span>Anomaly Detected</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P011', 'Samuel Okafor')" class="bg-primary hover:bg-blue-800 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-primary bg-primary-fixed px-2 py-1 rounded">13:30</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Ingrid Larsson</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P012 · 37F</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">Multiple Sclerosis · Depression</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-black border border-blue-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">auto_awesome</span>Briefing Ready</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P012', 'Ingrid Larsson')" class="bg-primary hover:bg-blue-800 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+    <tr class="hover:bg-surface-container-low/30 transition-colors">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-4">
+          <span class="text-xs font-bold text-error bg-error-container px-2 py-1 rounded">14:00</span>
+          <div>
+            <p class="text-sm font-bold text-on-surface">Theo Blackwood</p>
+            <p class="text-[11px] text-on-surface-variant">ID: P013 · 52M</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4"><p class="text-xs text-on-surface">ALS · Dysphagia · Respiratory Failure</p></td>
+      <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-red-50 text-red-700 text-[10px] font-black border border-red-100 flex items-center gap-1 w-fit"><span class="material-symbols-outlined text-[12px]">emergency</span>Critical</span></td>
+      <td class="px-6 py-4 text-right">
+        <button onclick="selectPatient('P013', 'Theo Blackwood')" class="bg-error hover:bg-red-700 text-white px-3 py-1.5 text-xs font-bold rounded-lg transition-colors flex items-center gap-1 ml-auto">
+          <span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Briefing
+        </button>
+      </td>
+    </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-xs text-on-surface-variant mt-3 px-1">Showing 13 of 13 patients scheduled today</p>
   </div>
 
-  <!-- PAGE 2: PATIENT BRIEFING -->
-  <div id="page-briefing" class="page page-transition">
+  <!-- PATIENT BRIEFING -->
+  <div id="page-briefing" class="page fade-in p-6">
+    <div class="mb-5">
+      <h1 class="text-2xl font-extrabold text-on-surface">Patient Briefing</h1>
+      <p class="text-sm text-on-surface-variant mt-1">Select any patient to run all 9 AI agents</p>
+    </div>
+    <div class="patient-btns-wrap mb-6">
+<button onclick="selectPatient('P001', 'John Doe')" id="btn-P001" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P001 — John</button>
+<button onclick="selectPatient('P002', 'Sarah Chen')" id="btn-P002" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P002 — Sarah</button>
+<button onclick="selectPatient('P003', 'Marcus Johnson')" id="btn-P003" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P003 — Marcus</button>
+<button onclick="selectPatient('P004', 'Patricia Williams')" id="btn-P004" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P004 — Patricia</button>
+<button onclick="selectPatient('P005', 'Robert Nguyen')" id="btn-P005" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P005 — Robert</button>
+<button onclick="selectPatient('P006', 'Aiden Patel')" id="btn-P006" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P006 — Aiden</button>
+<button onclick="selectPatient('P007', 'Lily Thompson')" id="btn-P007" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P007 — Lily</button>
+<button onclick="selectPatient('P008', 'Diana Foster')" id="btn-P008" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P008 — Diana</button>
+<button onclick="selectPatient('P009', 'Carlos Rivera')" id="btn-P009" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P009 — Carlos</button>
+<button onclick="selectPatient('P010', 'Eleanor Voss')" id="btn-P010" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P010 — Eleanor</button>
+<button onclick="selectPatient('P011', 'Samuel Okafor')" id="btn-P011" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P011 — Samuel</button>
+<button onclick="selectPatient('P012', 'Ingrid Larsson')" id="btn-P012" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P012 — Ingrid</button>
+<button onclick="selectPatient('P013', 'Theo Blackwood')" id="btn-P013" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P013 — Theo</button>
 
-<!-- Left Column: Core Medical Content (Scrollable) -->
-<div class="flex-1 overflow-y-auto pr-4 custom-scrollbar space-y-8 pb-12">
-<!-- Patient Summary Bar -->
-<section class="bg-surface-container-lowest rounded-xl p-6 flex items-center justify-between shadow-sm border border-slate-100/50">
-<div class="flex items-center gap-6">
-<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-primary/10">
-<img class="w-full h-full object-cover" data-alt="portrait of an elderly woman with silver hair and gentle features in a soft blue hospital gown" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuquvMD-tTRVH6XcMJeImQowzeGGgzJDAKjMvqDALKktAy8pLkra-HSdb2s09oXv5M3t0mC1jYyrr5soptaj-e7RGlkyXF0bO1v0_02VlemAWmSOODYwW5RsuCo0EDrUfrOc_tDrWA1PNEzorlb19lp8ov6Z2ly9ZFmknHjsk78sfNCENnOpjk5gFOTweRgWnkzjYEnGtYZbYBWkH7M-5QzSbuJLWfMygwR51QhekN9L8ZpeVGEWivUmyBR4kjNENQDNfrPFJTkHs"/>
-</div>
-<div>
-<h2 class="text-2xl font-black text-on-surface">Eleanor Vance, 74</h2>
-<div class="flex gap-4 mt-1">
-<span class="text-xs font-medium text-on-surface-variant flex items-center gap-1">
-<span class="material-symbols-outlined text-xs">fingerprint</span> ID: #MED-8829-X
-                            </span>
-<span class="text-xs font-medium text-on-surface-variant flex items-center gap-1">
-<span class="material-symbols-outlined text-xs">calendar_today</span> Adm: Oct 12, 2023
-                            </span>
-</div>
-</div>
-</div>
-<div class="flex gap-3">
-<div class="bg-surface-container-low px-4 py-2 rounded-lg text-center">
-<p class="text-[10px] font-bold text-on-surface-variant uppercase">Blood Type</p>
-<p class="text-lg font-bold text-primary">A Pos</p>
-</div>
-<div class="bg-surface-container-low px-4 py-2 rounded-lg text-center">
-<p class="text-[10px] font-bold text-on-surface-variant uppercase">Height</p>
-<p class="text-lg font-bold text-primary">162 cm</p>
-</div>
-<div class="bg-surface-container-low px-4 py-2 rounded-lg text-center">
-<p class="text-[10px] font-bold text-on-surface-variant uppercase">Weight</p>
-<p class="text-lg font-bold text-primary">68 kg</p>
-</div>
-</div>
-</section>
-<!-- 4 Quadrants Grid -->
-<div class="grid grid-cols-2 gap-8">
-<!-- 1) Vital Anomaly Detection -->
-<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-slate-100/50">
-<div class="flex items-center justify-between mb-6">
-<h3 class="headline text-lg font-bold text-on-surface flex items-center gap-2">
-<span class="material-symbols-outlined text-error">warning</span>
-                            Vital Anomaly Detection
-                        </h3>
-<span class="bg-error-container text-on-error-container text-[10px] font-black px-2 py-1 rounded">2 CRITICAL</span>
-</div>
-<div class="space-y-4">
-<div class="p-4 bg-error-container/20 rounded-lg flex items-center justify-between">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-error font-bold">ecg_heart</span>
-<div>
-<p class="text-xs font-bold text-error uppercase">Resting HR</p>
-<p class="text-2xl font-black text-on-surface">114 BPM</p>
-</div>
-</div>
-<div class="text-right">
-<p class="text-[10px] text-error font-bold">+22% vs Baseline</p>
-<p class="text-[10px] text-on-surface-variant">Tachycardia detected</p>
-</div>
-</div>
-<div class="p-4 bg-surface-container-low rounded-lg flex items-center justify-between border-l-4 border-error">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-error">thermostat</span>
-<div>
-<p class="text-xs font-bold text-on-surface-variant uppercase">Body Temp</p>
-<p class="text-2xl font-black text-on-surface">38.9°C</p>
-</div>
-</div>
-<div class="text-right">
-<p class="text-[10px] text-error font-bold">Rising rapidly</p>
-<p class="text-[10px] text-on-surface-variant">Fever spiked at 02:15</p>
-</div>
-</div>
-<div class="p-4 bg-surface-container-low rounded-lg flex items-center justify-between border-l-4 border-secondary">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-secondary">blood_pressure</span>
-<div>
-<p class="text-xs font-bold text-on-surface-variant uppercase">Blood Pressure</p>
-<p class="text-2xl font-black text-on-surface">138 / 92</p>
-</div>
-</div>
-<div class="text-right">
-<p class="text-[10px] text-secondary font-bold">High/Stable</p>
-<p class="text-[10px] text-on-surface-variant">Stage 1 Hypertension</p>
-</div>
-</div>
-</div>
-</div>
-<!-- 2) Differential Diagnosis -->
-<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-slate-100/50">
-<div class="flex items-center justify-between mb-6">
-<h3 class="headline text-lg font-bold text-on-surface flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">clinical_notes</span>
-                            Differential Diagnosis
-                        </h3>
-<span class="text-[10px] font-bold text-on-surface-variant">AI CONFIDENCE INDEX</span>
-</div>
-<div class="space-y-6">
-<div>
-<div class="flex justify-between mb-2">
-<span class="text-sm font-bold text-on-surface">Acute Pyelonephritis</span>
-<span class="text-sm font-black text-primary">84%</span>
-</div>
-<div class="h-2 bg-surface-container-high rounded-full overflow-hidden">
-<div class="h-full bg-primary rounded-full" style="width: 84%"></div>
-</div>
-</div>
-<div>
-<div class="flex justify-between mb-2">
-<span class="text-sm font-bold text-on-surface">Sepsis secondary to UTI</span>
-<span class="text-sm font-black text-primary">61%</span>
-</div>
-<div class="h-2 bg-surface-container-high rounded-full overflow-hidden">
-<div class="h-full bg-primary/60 rounded-full" style="width: 61%"></div>
-</div>
-</div>
-<div>
-<div class="flex justify-between mb-2">
-<span class="text-sm font-bold text-on-surface">Nephrolithiasis</span>
-<span class="text-sm font-black text-primary">22%</span>
-</div>
-<div class="h-2 bg-surface-container-high rounded-full overflow-hidden">
-<div class="h-full bg-primary/20 rounded-full" style="width: 22%"></div>
-</div>
-</div>
-<div class="pt-4 border-t border-slate-100">
-<p class="text-xs text-on-surface-variant italic">"Observation: Agent Diagnostic detected correlated white blood cell count spikes in recent labs."</p>
-</div>
-</div>
-</div>
-<!-- 3) Drug Interaction Check -->
-<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-slate-100/50">
-<div class="flex items-center justify-between mb-6">
-<h3 class="headline text-lg font-bold text-on-surface flex items-center gap-2">
-<span class="material-symbols-outlined text-primary-container">medication</span>
-                            Drug Interaction Check
-                        </h3>
-<button class="text-[10px] font-bold text-primary underline">VIEW FULL LIST</button>
-</div>
-<div class="space-y-4">
-<div class="p-4 bg-error-container/10 rounded-lg flex gap-4 items-start">
-<div class="bg-error p-2 rounded-lg">
-<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">dangerous</span>
-</div>
-<div>
-<h4 class="text-sm font-bold text-on-surface">Warfarin x Ibuprofen</h4>
-<p class="text-xs text-on-surface-variant mt-1">High risk of internal bleeding. Patient currently prescribed 5mg Warfarin daily.</p>
-<div class="mt-2 flex gap-2">
-<span class="px-2 py-0.5 bg-error text-white text-[9px] font-black rounded uppercase">Severe Interaction</span>
-</div>
-</div>
-</div>
-<div class="p-4 bg-tertiary-fixed/20 rounded-lg flex gap-4 items-start">
-<div class="bg-tertiary p-2 rounded-lg">
-<span class="material-symbols-outlined text-white text-sm">warning</span>
-</div>
-<div>
-<h4 class="text-sm font-bold text-on-surface">Lisinopril x Potassium Supp</h4>
-<p class="text-xs text-on-surface-variant mt-1">Potential for hyperkalemia. Monitor serum potassium levels weekly.</p>
-</div>
-</div>
-</div>
-</div>
-<!-- 4) Risk Scores -->
-<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-slate-100/50">
-<div class="flex items-center justify-between mb-6">
-<h3 class="headline text-lg font-bold text-on-surface flex items-center gap-2">
-<span class="material-symbols-outlined text-secondary">analytics</span>
-                            Dynamic Risk Scores
-                        </h3>
-</div>
-<div class="grid grid-cols-2 gap-4">
-<div class="p-4 rounded-xl bg-surface-container-low border border-slate-200/50">
-<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-4">Cardio Risk</p>
-<div class="flex items-baseline gap-1">
-<span class="text-3xl font-black text-on-surface">18</span>
-<span class="text-xs font-bold text-on-surface-variant">%</span>
-</div>
-<div class="mt-2 h-1 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-secondary w-[18%]"></div>
-</div>
-<p class="text-[10px] mt-2 font-medium text-secondary">MODERATE</p>
-</div>
-<div class="p-4 rounded-xl bg-surface-container-low border border-slate-200/50">
-<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-4">Fall Risk</p>
-<div class="flex items-baseline gap-1">
-<span class="text-3xl font-black text-error">72</span>
-<span class="text-xs font-bold text-on-surface-variant">%</span>
-</div>
-<div class="mt-2 h-1 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-error w-[72%]"></div>
-</div>
-<p class="text-[10px] mt-2 font-black text-error">CRITICAL</p>
-</div>
-<div class="p-4 rounded-xl bg-surface-container-low border border-slate-200/50">
-<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-4">Readmission</p>
-<div class="flex items-baseline gap-1">
-<span class="text-3xl font-black text-on-surface">42</span>
-<span class="text-xs font-bold text-on-surface-variant">%</span>
-</div>
-<div class="mt-2 h-1 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-on-tertiary-fixed-variant w-[42%]"></div>
-</div>
-<p class="text-[10px] mt-2 font-medium text-on-tertiary-fixed-variant">ELEVATED</p>
-</div>
-<div class="p-4 rounded-xl bg-surface-container-low border border-slate-200/50">
-<p class="text-[10px] font-bold text-on-surface-variant uppercase mb-4">Sepsis Index</p>
-<div class="flex items-baseline gap-1">
-<span class="text-3xl font-black text-on-surface">12</span>
-<span class="text-xs font-bold text-on-surface-variant">/100</span>
-</div>
-<div class="mt-2 h-1 bg-surface-container-highest rounded-full overflow-hidden">
-<div class="h-full bg-primary w-[12%]"></div>
-</div>
-<p class="text-[10px] mt-2 font-medium text-primary">LOW</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Right Column: AI Agent Log -->
-<aside class="w-80 flex flex-col h-full bg-surface-container-low rounded-xl border border-slate-200/50 overflow-hidden shadow-lg">
-<div class="p-6 bg-primary text-on-primary">
-<h3 class="headline font-bold text-lg flex items-center gap-2">
-<span class="material-symbols-outlined text-on-primary-container">smart_toy</span>
-                    AI Agent Log
-                </h3>
-<p class="text-xs text-on-primary-container mt-1">9 Agents Active • Real-time Monitoring</p>
-</div>
-<div class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-<!-- Agent Item 1 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-primary shadow-sm">
-<div class="flex justify-between items-center mb-1">
-<span class="text-[10px] font-black text-primary uppercase">Vital Agent</span>
-<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-</div>
-<p class="text-xs font-medium text-on-surface">Monitoring heart rate spikes. Trend analysis initiated.</p>
-<p class="text-[9px] text-on-surface-variant mt-2 font-mono">12:44:02 · Vitals Stream</p>
-</div>
-<!-- Agent Item 2 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-error shadow-sm">
-<div class="flex justify-between items-center mb-1">
-<span class="text-[10px] font-black text-error uppercase">PharmAgent</span>
-<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-</div>
-<p class="text-xs font-medium text-on-surface">FLAG: Interaction detected between Warfarin and Ibuprofen.</p>
-<p class="text-[9px] text-on-surface-variant mt-2 font-mono">12:43:15 · Rx Check</p>
-</div>
-<!-- Agent Item 3 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-secondary shadow-sm">
-<div class="flex justify-between items-center mb-1">
-<span class="text-[10px] font-black text-secondary uppercase">LabAgent</span>
-<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-</div>
-<p class="text-xs font-medium text-on-surface">Comparing CBC results with clinical history. WBC elevating.</p>
-<p class="text-[9px] text-on-surface-variant mt-2 font-mono">12:42:50 · Lab Stream</p>
-</div>
-<!-- Agent Item 4 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-on-tertiary-container shadow-sm opacity-60">
-<div class="flex justify-between items-center mb-1">
-<span class="text-[10px] font-black text-on-tertiary-container uppercase">RadAgent</span>
-<span class="text-[9px] text-on-surface-variant">IDLE</span>
-</div>
-<p class="text-xs font-medium text-on-surface">Waiting for Chest X-ray upload.</p>
-<p class="text-[9px] text-on-surface-variant mt-2 font-mono">12:40:11 · Imaging Queue</p>
-</div>
-<!-- Agent Item 5 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-primary shadow-sm">
-<div class="flex justify-between items-center mb-1">
-<span class="text-[10px] font-black text-primary uppercase">RiskAgent</span>
-<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-</div>
-<p class="text-xs font-medium text-on-surface">Fall Risk score updated based on last mobility test.</p>
-<p class="text-[9px] text-on-surface-variant mt-2 font-mono">12:38:22 · Analytics</p>
-</div>
-<!-- Agent Item 6 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-slate-400 shadow-sm">
-<div class="flex justify-between items-center mb-1">
-<span class="text-[10px] font-black text-slate-500 uppercase">HistAgent</span>
-<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-</div>
-<p class="text-xs font-medium text-on-surface">Parsing 2018 oncology records for relevant history.</p>
-<p class="text-[9px] text-on-surface-variant mt-2 font-mono">12:35:45 · EHR Scan</p>
-</div>
-<!-- Agent Item 7 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-primary shadow-sm">
-<div class="flex justify-between items-center mb-1">
-<span class="text-[10px] font-black text-primary uppercase">DiagnosAgent</span>
-<span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-</div>
-<p class="text-xs font-medium text-on-surface">Computing differential confidence scores...</p>
-<p class="text-[9px] text-on-surface-variant mt-2 font-mono">12:33:01 · Processing</p>
-</div>
-<!-- Agent Item 8 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-emerald-600 shadow-sm">
-<div class="flex justify-between items-center mb-1">
-<span class="text-[10px] font-black text-emerald-600 uppercase">MicroAgent</span>
-<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-</div>
-<p class="text-xs font-medium text-on-surface">Urine culture prelim results matched with Pyelonephritis.</p>
-<p class="text-[9px] text-on-surface-variant mt-2 font-mono">12:31:12 · Micro Stream</p>
-</div>
-<!-- Agent Item 9 -->
-<div class="bg-surface-container-lowest p-3 rounded-lg border-l-4 border-primary shadow-sm">
-<div class="flex justify-between items-center mb-1">
-<span class="text-[10px] font-black text-primary uppercase">FlowAgent</span>
-<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-</div>
-<p class="text-xs font-medium text-on-surface">Optimizing nurse rounding schedule for Room 402.</p>
-<p class="text-[9px] text-on-surface-variant mt-2 font-mono">12:28:55 · Workflow</p>
-</div>
-</div>
-<div class="p-4 bg-surface-container-high">
-<button class="w-full py-2 bg-white text-primary text-[10px] font-black rounded border border-slate-200 hover:bg-slate-50 transition-colors uppercase tracking-widest">
-                    Configure Agent Hive
-                </button>
-</div>
-</aside>
+    </div>
 
+    <div id="briefing-loading" class="hidden flex-col items-center justify-center py-20">
+      <div class="w-10 h-10 border-4 border-primary border-t-transparent rounded-full spinner mb-4"></div>
+      <p class="text-lg font-bold text-on-surface mb-1">Running 9 Clinical Agents...</p>
+      <p class="text-sm text-on-surface-variant mb-6" id="loading-step">Initializing...</p>
+      <div id="agent-steps" class="space-y-1 text-xs text-on-surface-variant w-72"></div>
+    </div>
+    <div id="briefing-empty" class="flex flex-col items-center justify-center py-20">
+      <span class="material-symbols-outlined text-5xl text-slate-300 mb-3" style="font-variation-settings:'FILL' 1">medical_information</span>
+      <p class="text-base font-bold text-on-surface-variant">Select a patient above to begin</p>
+    </div>
+    <div id="briefing-results" class="hidden space-y-5"></div>
   </div>
 
-  <!-- PAGE 3: SOAP GENERATOR -->
-  <div id="page-soap" class="page page-transition">
+  <!-- SOAP GENERATOR -->
+  <div id="page-soap" class="page fade-in p-6">
+    <div class="mb-5">
+      <h1 class="text-2xl font-extrabold text-on-surface">SOAP Generator</h1>
+      <p class="text-sm text-on-surface-variant mt-1">AI-generated clinical SOAP notes</p>
+    </div>
+    <div class="patient-btns-wrap mb-6">
+<button onclick="selectPatient('P001', 'John Doe')" id="soap-btn-P001" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P001</button>
+<button onclick="selectPatient('P002', 'Sarah Chen')" id="soap-btn-P002" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P002</button>
+<button onclick="selectPatient('P003', 'Marcus Johnson')" id="soap-btn-P003" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P003</button>
+<button onclick="selectPatient('P004', 'Patricia Williams')" id="soap-btn-P004" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P004</button>
+<button onclick="selectPatient('P005', 'Robert Nguyen')" id="soap-btn-P005" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P005</button>
+<button onclick="selectPatient('P006', 'Aiden Patel')" id="soap-btn-P006" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P006</button>
+<button onclick="selectPatient('P007', 'Lily Thompson')" id="soap-btn-P007" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P007</button>
+<button onclick="selectPatient('P008', 'Diana Foster')" id="soap-btn-P008" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P008</button>
+<button onclick="selectPatient('P009', 'Carlos Rivera')" id="soap-btn-P009" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P009</button>
+<button onclick="selectPatient('P010', 'Eleanor Voss')" id="soap-btn-P010" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P010</button>
+<button onclick="selectPatient('P011', 'Samuel Okafor')" id="soap-btn-P011" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P011</button>
+<button onclick="selectPatient('P012', 'Ingrid Larsson')" id="soap-btn-P012" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P012</button>
+<button onclick="selectPatient('P013', 'Theo Blackwood')" id="soap-btn-P013" class="patient-btn px-3 py-1.5 border border-outline-variant rounded-lg text-xs font-semibold text-on-surface hover:border-primary hover:text-primary transition-colors whitespace-nowrap">P013</button>
 
-<div class="max-w-6xl mx-auto p-8">
-<!-- Page Header -->
-<div class="flex justify-between items-end mb-8">
-<div>
-<nav class="flex items-center gap-2 text-label-md text-on-surface-variant mb-2">
-<span class="text-xs">Patient Case #9982</span>
-<span class="material-symbols-outlined text-[14px]">chevron_right</span>
-<span class="text-xs font-semibold text-primary">Generated SOAP Note</span>
-</nav>
-<h2 class="text-3xl font-extrabold font-headline text-on-surface tracking-tight">Interactive Editor</h2>
-</div>
-<div class="flex gap-3">
-<button class="px-5 py-2.5 rounded-lg text-sm font-bold text-on-surface hover:bg-surface-container-high transition-colors flex items-center gap-2 border border-outline-variant/20">
-<span class="material-symbols-outlined text-[18px]">edit_note</span>
-                        Edit Manually
-                    </button>
-<button class="px-5 py-2.5 rounded-lg text-sm font-bold text-primary bg-secondary-container hover:opacity-90 transition-all flex items-center gap-2">
-<span class="material-symbols-outlined text-[18px]">auto_fix_high</span>
-                        Refine with AI
-                    </button>
-<button class="px-6 py-2.5 rounded-lg text-sm font-bold text-on-primary bg-primary shadow-sm hover:shadow-md transition-all flex items-center gap-2">
-<span class="material-symbols-outlined text-[18px]">check_circle</span>
-                        Accept All
-                    </button>
-</div>
-</div>
-<!-- Bento Grid Content -->
-<div class="grid grid-cols-12 gap-6">
-<!-- Patient Context Card (Left Column) -->
-<div class="col-span-12 lg:col-span-4 space-y-6">
-<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 shadow-sm">
-<div class="flex items-center gap-4 mb-6">
-<img alt="Patient" class="w-16 h-16 rounded-full object-cover" data-alt="Portrait of an elderly woman with silver hair and gentle features, looking thoughtfully, neutral clinical environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdayiU2g5PMAB5XcPhLaNpVO7Fqei-FP2AooxNjhmstoupGpQtAhFDHRu71Og9pHZ2XsAWdLmSncM28UdcTuTloZCHx_V9M2DMPqS9tuuvYCzFhEEjrpCDFpksENWUEv0GmKhZnPg7oOKsl-glkjaLowi0BHV3fQ6lJBrwIUIAVIuxzQTr0YXxN7KZOqPE6x0VZFXBhRUQYcnb6wkM6RVjnC8m9NfPzlLYKB6yq4vwSMiaKgUxvJxrFn35nVKLcpb07P-myHgFrac"/>
-<div>
-<h3 class="font-bold text-on-surface">Elena Rodriguez</h3>
-<p class="text-xs text-on-surface-variant">72 Years • Female</p>
-<span class="inline-block mt-2 px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold rounded-full">TYPE 2 DIABETES</span>
-</div>
-</div>
-<div class="space-y-4">
-<div>
-<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Chief Complaint</label>
-<p class="text-sm font-medium mt-1">Intermittent neuropathy and bilateral fatigue in lower extremities.</p>
-</div>
-<div class="h-px bg-surface-container"></div>
-<div>
-<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Vitals (Current)</label>
-<div class="grid grid-cols-2 gap-4 mt-2">
-<div class="bg-surface p-2 rounded-lg">
-<span class="text-[10px] text-on-surface-variant block">BP</span>
-<span class="text-sm font-bold">132/84</span>
-</div>
-<div class="bg-surface p-2 rounded-lg">
-<span class="text-[10px] text-on-surface-variant block">HbA1c</span>
-<span class="text-sm font-bold text-error">7.4%</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="bg-primary-container/10 p-6 rounded-xl border border-primary/10">
-<div class="flex items-center gap-2 mb-4">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
-<h4 class="text-sm font-bold text-primary uppercase">AI Confidence</h4>
-</div>
-<div class="w-full bg-surface-container-highest h-1.5 rounded-full mb-3">
-<div class="bg-primary h-1.5 rounded-full" style="width: 94%"></div>
-</div>
-<p class="text-xs text-on-surface-variant leading-relaxed">
-                            Sentinel processed 14 minutes of consultation audio with 94% accuracy. High confidence in Objective findings based on synchronized EHR data.
-                        </p>
-</div>
-</div>
-<!-- Editor Section (Right Column) -->
-<div class="col-span-12 lg:col-span-8 space-y-6">
-<!-- Subjective Section -->
-<section class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
-<div class="px-6 py-4 bg-surface-container-low flex justify-between items-center">
-<h3 class="font-headline font-bold text-primary flex items-center gap-2">
-<span class="material-symbols-outlined">person</span>
-                                Subjective
-                            </h3>
-<button class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">history</button>
-</div>
-<div class="p-6">
-<div class="ai-highlight p-4 rounded-lg">
-<p class="text-sm leading-relaxed text-on-surface">
-                                    Patient reports persistent tingling and occasional "sharp, shooting pains" in both feet, significantly worse at night. She notes a reduction in overall activity levels over the past 3 months due to discomfort. Denies any recent falls or balance issues. Adherence to Metformin (1000mg BID) is reported as consistent, though dietary management has been "challenging" during recent holiday period.
-                                </p>
-</div>
-</div>
-</section>
-<!-- Objective Section -->
-<section class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
-<div class="px-6 py-4 bg-surface-container-low flex justify-between items-center">
-<h3 class="font-headline font-bold text-primary flex items-center gap-2">
-<span class="material-symbols-outlined">analytics</span>
-                                Objective
-                            </h3>
-<button class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">add_circle</button>
-</div>
-<div class="p-6 space-y-4">
-<div class="ai-highlight p-4 rounded-lg">
-<ul class="text-sm space-y-2 list-disc list-inside text-on-surface">
-<li>Physical Exam: Bilateral diminished vibratory sensation at the hallux.</li>
-<li>Monofilament testing: 4/10 sites undetected on left foot, 3/10 on right.</li>
-<li>Lower extremity pulses: Posterior tibial 2+ bilaterally, Dorsalis pedis 1+ bilaterally.</li>
-<li>Skin: Dry, with minor hyperkeratosis at the 1st MTP joint. No active ulceration.</li>
-</ul>
-</div>
-</div>
-</section>
-<!-- Assessment Section -->
-<section class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
-<div class="px-6 py-4 bg-surface-container-low flex justify-between items-center">
-<h3 class="font-headline font-bold text-primary flex items-center gap-2">
-<span class="material-symbols-outlined">summarize</span>
-                                Assessment
-                            </h3>
-</div>
-<div class="p-6">
-<div class="ai-highlight p-4 rounded-lg">
-<p class="text-sm font-bold text-on-surface mb-2">Primary Diagnosis: Diabetic Peripheral Neuropathy (ICD-10 E11.40)</p>
-<p class="text-sm leading-relaxed text-on-surface">
-                                    The patient's clinical presentation and objective findings are highly suggestive of advancing diabetic peripheral neuropathy. Elevation in HbA1c (7.4%) correlates with the exacerbation of symptoms. Differential diagnosis of Vitamin B12 deficiency considered but less likely given diabetic history.
-                                </p>
-</div>
-</div>
-</section>
-<!-- Plan Section -->
-<section class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
-<div class="px-6 py-4 bg-surface-container-low flex justify-between items-center">
-<h3 class="font-headline font-bold text-primary flex items-center gap-2">
-<span class="material-symbols-outlined">event_note</span>
-                                Plan
-                            </h3>
-</div>
-<div class="p-6 space-y-4">
-<div class="ai-highlight p-4 rounded-lg">
-<ol class="text-sm space-y-3 list-decimal list-inside text-on-surface">
-<li><span class="font-semibold text-primary">Medication:</span> Initiate Gabapentin 300mg QHS for neuropathic pain; titrate as tolerated.</li>
-<li><span class="font-semibold text-primary">Diagnostics:</span> Order Vitamin B12 and folate levels to rule out nutritional deficiencies.</li>
-<li><span class="font-semibold text-primary">Referral:</span> Podiatry consultation for hyperkeratosis management and diabetic foot care education.</li>
-<li><span class="font-semibold text-primary">Follow-up:</span> Repeat HbA1c in 3 months; patient scheduled for 4-week follow-up for Gabapentin review.</li>
-</ol>
-</div>
-</div>
-</section>
-</div>
-</div>
-<!-- Footer Meta -->
-<div class="mt-12 mb-8 flex justify-between items-center text-on-surface-variant">
-<div class="flex items-center gap-4 text-xs font-medium">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">save</span> Auto-saved 2m ago</span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">security</span> HIPAA Compliant Session</span>
-</div>
-<div class="flex items-center gap-2 text-xs">
-<span class="opacity-60 italic">Generated by MediCopilot Engine v4.2.1</span>
-</div>
-</div>
-</div>
-
+    </div>
+    <div id="soap-loading" class="hidden flex-col items-center justify-center py-20">
+      <div class="w-10 h-10 border-4 border-primary border-t-transparent rounded-full spinner mb-4"></div>
+      <p class="text-lg font-bold text-on-surface">Generating SOAP Note...</p>
+    </div>
+    <div id="soap-empty" class="flex flex-col items-center justify-center py-20">
+      <span class="material-symbols-outlined text-5xl text-slate-300 mb-3" style="font-variation-settings:'FILL' 1">history_edu</span>
+      <p class="text-base font-bold text-on-surface-variant">Select a patient to generate SOAP note</p>
+    </div>
+    <div id="soap-results" class="hidden"></div>
   </div>
 
-  <!-- PAGE 4: AGENT STATUS -->
-  <div id="page-agents" class="page page-transition">
-
-<div class="p-8 max-w-7xl mx-auto">
-<!-- Page Header -->
-<div class="mb-12 flex justify-between items-end">
-<div>
-<h2 class="text-4xl font-headline font-extrabold text-on-surface tracking-tight">Agent Orchestration</h2>
-<p class="text-on-surface-variant mt-2 max-w-xl">Real-time visualization of clinical data ingestion, specialized agent synthesis, and final briefing generation.</p>
-</div>
-<div class="flex gap-2">
-<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full flex items-center gap-1">
-<span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-                        LIVE PIPELINE
-                    </span>
-<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant text-xs font-bold rounded-full">
-                        LATENCY: 42MS
-                    </span>
-</div>
-</div>
-<!-- Orchestration Visualization -->
-<div class="grid grid-cols-12 gap-8 items-stretch">
-<!-- STAGE 1: Ingestion -->
-<div class="col-span-3 flex flex-col gap-6">
-<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-primary">
-<div class="flex items-center gap-3 mb-4">
-<span class="material-symbols-outlined text-primary" data-icon="description">description</span>
-<h3 class="font-headline font-bold text-primary">Scattered Notes</h3>
-</div>
-<div class="space-y-3">
-<div class="bg-surface-container-lowest p-3 rounded shadow-sm text-xs text-on-surface-variant italic border-l-2 border-slate-300">
-                                "Pt c/o chest tightness for 2hrs, radiating to L-arm. BP 145/90..."
-                            </div>
-<div class="bg-surface-container-lowest p-3 rounded shadow-sm text-xs text-on-surface-variant italic border-l-2 border-slate-300">
-                                "Labs: Trop I pending, ECG shows sinus tach with possible T-wave inversion."
-                            </div>
-<div class="bg-surface-container-lowest p-3 rounded shadow-sm text-xs text-on-surface-variant italic border-l-2 border-slate-300">
-                                "Hx of HTN, non-compliant with meds. Last LDL 160."
-                            </div>
-</div>
-</div>
-</div>
-<!-- CONNECTOR 1 -->
-<div class="col-span-1 flex items-center justify-center">
-<div class="w-full h-1 bg-gradient-to-r from-primary/20 to-primary/60 relative overflow-hidden">
-<div class="flow-line absolute inset-0 w-1/2"></div>
-</div>
-</div>
-<!-- STAGE 2: Agent Grid (The Core Orchestration) -->
-<div class="col-span-5 grid grid-cols-2 gap-4">
-<!-- Agent 1: Anomaly Detector -->
-<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20 hover:shadow-lg transition-shadow group">
-<div class="flex justify-between items-start mb-3">
-<div class="w-10 h-10 rounded-lg bg-error-container/20 flex items-center justify-center text-error">
-<span class="material-symbols-outlined" data-icon="priority_high">priority_high</span>
-</div>
-<span class="text-[10px] font-bold text-error uppercase">Active</span>
-</div>
-<h4 class="font-headline font-bold text-sm">Anomaly Detector</h4>
-<p class="text-xs text-on-surface-variant mt-1">Cross-referencing historical vitals with current spike in Troponin levels.</p>
-</div>
-<!-- Agent 2: Diagnosis Engine -->
-<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20 hover:shadow-lg transition-shadow">
-<div class="flex justify-between items-start mb-3">
-<div class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center text-primary">
-<span class="material-symbols-outlined" data-icon="biotech">biotech</span>
-</div>
-<span class="text-[10px] font-bold text-primary-fixed-variant uppercase">Processing</span>
-</div>
-<h4 class="font-headline font-bold text-sm">Diagnosis Engine</h4>
-<p class="text-xs text-on-surface-variant mt-1">Applying Bayesian inference across 40k cardiology case studies.</p>
-</div>
-<!-- Agent 3: Interaction Checker -->
-<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20 hover:shadow-lg transition-shadow">
-<div class="flex justify-between items-start mb-3">
-<div class="w-10 h-10 rounded-lg bg-secondary-container flex items-center justify-center text-on-secondary-container">
-<span class="material-symbols-outlined" data-icon="medication">medication</span>
-</div>
-<span class="text-[10px] font-bold text-on-secondary-fixed-variant uppercase">Verified</span>
-</div>
-<h4 class="font-headline font-bold text-sm">Interaction Checker</h4>
-<p class="text-xs text-on-surface-variant mt-1">No contraindications found between ACE inhibitors and Nitro spray.</p>
-</div>
-<!-- Agent 4: Protocol Auditor -->
-<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20 hover:shadow-lg transition-shadow">
-<div class="flex justify-between items-start mb-3">
-<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-outline">
-<span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
-</div>
-<span class="text-[10px] font-bold text-outline-variant uppercase">Standby</span>
-</div>
-<h4 class="font-headline font-bold text-sm">Protocol Auditor</h4>
-<p class="text-xs text-on-surface-variant mt-1">Awaiting secondary labs to confirm AHA STEMI pathway alignment.</p>
-</div>
-<!-- Agent 5: Longitudinal Analyst -->
-<div class="col-span-2 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20 hover:shadow-lg transition-shadow flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary">
-<span class="material-symbols-outlined" data-icon="timeline">timeline</span>
-</div>
-<div class="flex-1">
-<div class="flex justify-between">
-<h4 class="font-headline font-bold text-sm">Longitudinal Analyst</h4>
-<span class="text-[10px] font-bold text-tertiary uppercase">Synthesizing</span>
-</div>
-<p class="text-xs text-on-surface-variant mt-1">Correlating 5 years of outpatient visits with current acute presentation.</p>
-</div>
-</div>
-</div>
-<!-- CONNECTOR 2 -->
-<div class="col-span-1 flex items-center justify-center">
-<div class="w-full h-1 bg-gradient-to-r from-primary/60 to-primary relative overflow-hidden">
-<div class="flow-line absolute inset-0 w-1/2"></div>
-</div>
-</div>
-<!-- STAGE 3: Synthesis Output -->
-<div class="col-span-2 flex flex-col">
-<div class="bg-primary p-6 rounded-xl text-on-primary shadow-2xl flex-1 relative overflow-hidden">
-<!-- Background Graphic -->
-<div class="absolute -right-4 -bottom-4 opacity-10">
-<span class="material-symbols-outlined text-[120px]" data-icon="auto_awesome">auto_awesome</span>
-</div>
-<div class="relative z-10">
-<span class="material-symbols-outlined text-on-primary-container mb-4" data-icon="verified">verified</span>
-<h3 class="font-headline font-extrabold text-xl mb-4">Final Briefing</h3>
-<ul class="space-y-4">
-<li class="text-xs flex gap-2">
-<span class="w-1.5 h-1.5 bg-on-primary-container rounded-full mt-1 shrink-0"></span>
-                                    High confidence ACS diagnosis (94%).
-                                </li>
-<li class="text-xs flex gap-2">
-<span class="w-1.5 h-1.5 bg-on-primary-container rounded-full mt-1 shrink-0"></span>
-                                    Immediate Cardiac consult recommended.
-                                </li>
-<li class="text-xs flex gap-2">
-<span class="w-1.5 h-1.5 bg-on-primary-container rounded-full mt-1 shrink-0"></span>
-                                    Medication adjustments prepared for review.
-                                </li>
-</ul>
-<button class="w-full mt-8 py-3 bg-white text-primary rounded-lg font-bold text-sm hover:bg-on-primary-container transition-colors">
-                                View Full Report
-                            </button>
-</div>
-</div>
-</div>
-</div>
-<!-- Bottom Stats / Agent Status Bar -->
-<div class="mt-12 grid grid-cols-4 gap-6">
-<div class="bg-surface-container-low p-4 rounded-lg flex items-center gap-4">
-<div class="text-primary">
-<p class="text-[10px] font-bold uppercase text-on-surface-variant">Active Agents</p>
-<p class="text-2xl font-headline font-black">09 / 12</p>
-</div>
-<div class="flex -space-x-2 ml-auto">
-<div class="w-6 h-6 rounded-full bg-primary border-2 border-surface"></div>
-<div class="w-6 h-6 rounded-full bg-secondary border-2 border-surface"></div>
-<div class="w-6 h-6 rounded-full bg-tertiary border-2 border-surface"></div>
-<div class="w-6 h-6 rounded-full bg-outline border-2 border-surface flex items-center justify-center text-[10px] text-white">+6</div>
-</div>
-</div>
-<div class="bg-surface-container-low p-4 rounded-lg">
-<p class="text-[10px] font-bold uppercase text-on-surface-variant">Knowledge Base</p>
-<div class="flex items-end justify-between mt-1">
-<p class="text-2xl font-headline font-black">2.4 TB</p>
-<span class="text-xs text-primary font-bold">+142MB / s</span>
-</div>
-</div>
-<div class="bg-surface-container-low p-4 rounded-lg">
-<p class="text-[10px] font-bold uppercase text-on-surface-variant">Orchestration Health</p>
-<div class="w-full bg-surface-container-highest h-2 rounded-full mt-3">
-<div class="bg-primary h-full rounded-full w-[98%]"></div>
-</div>
-<p class="text-[10px] text-right mt-1 font-bold text-primary">98.2% OPTIMAL</p>
-</div>
-<div class="bg-surface-container-low p-4 rounded-lg flex items-center gap-4">
-<div class="w-10 h-10 rounded-full border-2 border-dashed border-primary flex items-center justify-center text-primary">
-<span class="material-symbols-outlined text-sm">hub</span>
-</div>
-<div>
-<p class="text-[10px] font-bold uppercase text-on-surface-variant">System Topology</p>
-<p class="text-sm font-bold text-on-surface">Neural-Graph v4.2</p>
-</div>
-</div>
-</div>
-<!-- Featured Agent Spotlight -->
-<section class="mt-12 bg-white rounded-2xl p-10 flex gap-12 items-center relative overflow-hidden">
-<!-- Subtle Gradient Accent -->
-<div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary-fixed/30 to-transparent"></div>
-<div class="w-1/3 shrink-0 relative">
-<div class="absolute inset-0 bg-primary/10 blur-3xl rounded-full"></div>
-<img alt="Agent Core Visualization" class="rounded-2xl shadow-2xl relative z-10 w-full aspect-square object-cover" data-alt="Abstract cinematic 3D render of a glowing blue futuristic server core with complex fiber optic connections and digital data particles flowing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVhL4sqFbqSYnTOJH9AeecV131gQNw4Z7BSE-mbTGdmZExqAkgo7xB-Og_KS2Umg9e_Effx8jNSD2WTSZLr8qFUjtaPAGlu7N1w6U-joyPqFxxs4bzFNyYzn1SO0ZmnJRqYicHj-ulKfo2rF8QrTvNz1Sm1TdVSHVo99mExzC9q5CNques4SIFUN5P8dX2XXJiBo-Yx0eIJxznkXRPcK7yFyo9YMfsvTa-9FMzD5Pa_8Fmu_lsTibSVpXwTc4YLZXhNZnd-CVrTEw"/>
-</div>
-<div class="flex-1 space-y-6 relative z-10">
-<span class="px-4 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-black uppercase rounded-full tracking-widest">Hackathon Tech Spotlight</span>
-<h3 class="text-4xl font-headline font-black text-blue-900 leading-tight">Hyper-Specialized Micro-Agents</h3>
-<p class="text-on-surface-variant text-lg">Instead of one generic LLM, MediCopilot orchestrates 9 specialized agents. Each agent is tuned for a specific medical domain—from pharmacokinetics to billing compliance—ensuring precision that "one-size-fits-all" AI simply cannot match.</p>
-<div class="grid grid-cols-2 gap-4">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
-<span class="text-sm font-bold text-on-surface">Zero-Hallucination Guardrails</span>
-</div>
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
-<span class="text-sm font-bold text-on-surface">Multi-Model Consensus</span>
-</div>
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
-<span class="text-sm font-bold text-on-surface">HIPAA-Native Processing</span>
-</div>
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
-<span class="text-sm font-bold text-on-surface">Explainable AI Logic</span>
-</div>
-</div>
-</div>
-</section>
-</div>
-
+  <!-- AGENT STATUS -->
+  <div id="page-agents" class="page fade-in p-6">
+    <div class="mb-5">
+      <h1 class="text-2xl font-extrabold text-on-surface">Agent Orchestration</h1>
+      <p class="text-sm text-on-surface-variant mt-1">Real-time trace of all 9 clinical AI agents</p>
+    </div>
+    <div id="agents-empty" class="flex flex-col items-center justify-center py-20">
+      <span class="material-symbols-outlined text-5xl text-slate-300 mb-3" style="font-variation-settings:'FILL' 1">smart_toy</span>
+      <p class="text-base font-bold text-on-surface-variant mb-2">No agent trace yet</p>
+      <p class="text-sm text-on-surface-variant mb-4">Generate a patient briefing first</p>
+      <button onclick="showPage('briefing')" class="px-5 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-blue-800 transition-colors">Go to Patient Briefing</button>
+    </div>
+    <div id="agents-results" class="hidden space-y-3"></div>
   </div>
 
 </main>
 
 <!-- FAB -->
-<div class="fixed bottom-8 right-8 z-50">
-  <button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all hover:bg-blue-800">
-    <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1">mic</span>
+<div class="fixed bottom-6 right-6 z-50">
+  <button onclick="showPage('briefing')" class="w-13 h-13 w-12 h-12 bg-primary text-white rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition-transform hover:bg-blue-800" title="New Consultation">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">add</span>
   </button>
 </div>
 
 <script>
+const API = 'https://medicopilot.onrender.com';
+let currentData = null;
+
+document.getElementById('dash-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+async function checkHealth() {
+  try {
+    const r = await fetch(API+'/health',{signal:AbortSignal.timeout(5000)});
+    if(r.ok){
+      document.getElementById('status-dot').className='w-2 h-2 rounded-full bg-green-500';
+      document.getElementById('status-text').textContent='API Connected';
+    }
+  } catch {
+    document.getElementById('status-dot').className='w-2 h-2 rounded-full bg-orange-400';
+    document.getElementById('status-text').textContent='API Waking Up...';
+    setTimeout(checkHealth, 8000);
+  }
+}
+checkHealth();
+
 function showPage(name) {
-  // Hide all pages
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  // Show target
-  const target = document.getElementById('page-' + name);
-  if (target) {
-    target.classList.add('active');
-    target.classList.remove('page-transition');
-    void target.offsetWidth;
-    target.classList.add('page-transition');
-  }
-  // Update nav
-  document.querySelectorAll('.nav-item').forEach(n => {
-    n.classList.remove('active');
-    n.classList.add('text-slate-500');
-    n.classList.remove('text-blue-900', 'font-bold');
-  });
-  const pages = ['dashboard','briefing','soap','agents'];
-  const idx = pages.indexOf(name);
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const navItems = document.querySelectorAll('.nav-item');
-  if (navItems[idx]) {
-    navItems[idx].classList.add('active');
-    navItems[idx].classList.remove('text-slate-500');
+  const pages = ['dashboard','briefing','soap','agents'];
+  navItems[pages.indexOf(name)]?.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+async function selectPatient(patientId, patientName) {
+  // Update button states
+  document.querySelectorAll('.patient-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll(`#btn-${patientId}, #soap-btn-${patientId}`).forEach(b=>b.classList.add('selected'));
+
+  showPage('briefing');
+
+  document.getElementById('briefing-empty').classList.add('hidden');
+  document.getElementById('briefing-results').classList.add('hidden');
+  const loadingEl = document.getElementById('briefing-loading');
+  loadingEl.classList.remove('hidden');
+  loadingEl.classList.add('flex');
+
+  const agentNames = [
+    'FHIRAgent — Fetching patient data...',
+    'MemoryAgent — Analyzing visit trends...',
+    'AnomalyDetector — Scanning vital signs...',
+    'RAGAgent — Retrieving medical guidelines...',
+    'DiagnosisAgent — Generating DDx...',
+    'DrugSafetyAgent — Checking interactions...',
+    'RiskScoringAgent — Computing risk scores...',
+    'SecondOpinionAgent — Reviewing diagnosis...',
+    'SOAPNoteGenerator — Writing SOAP note...'
+  ];
+  const stepsEl = document.getElementById('agent-steps');
+  stepsEl.innerHTML = '';
+  let idx = 0;
+  const timer = setInterval(()=>{
+    if(idx < agentNames.length){
+      document.getElementById('loading-step').textContent = agentNames[idx];
+      const el = document.createElement('div');
+      el.className = 'flex items-center gap-2 text-green-600';
+      el.innerHTML = `<span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">check_circle</span>${agentNames[idx]}`;
+      stepsEl.appendChild(el);
+      idx++;
+    }
+  }, 1400);
+
+  try {
+    const r = await fetch(API+'/invoke',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({patient_id:patientId,sharp_token:'demo',fhir_token:'demo'}),
+      signal:AbortSignal.timeout(120000)
+    });
+    clearInterval(timer);
+    if(!r.ok) throw new Error('API returned '+r.status);
+    currentData = await r.json();
+    loadingEl.classList.add('hidden');
+    loadingEl.classList.remove('flex');
+    renderBriefing(currentData);
+    renderSOAP(currentData);
+    renderAgents(currentData);
+  } catch(e) {
+    clearInterval(timer);
+    loadingEl.classList.add('hidden');
+    loadingEl.classList.remove('flex');
+    const resultsEl = document.getElementById('briefing-results');
+    resultsEl.innerHTML = `
+      <div class="bg-red-50 border border-red-200 border-l-4 border-l-red-500 rounded-xl p-5">
+        <p class="font-bold text-red-700 flex items-center gap-2 mb-2"><span class="material-symbols-outlined">error</span>Connection Error</p>
+        <p class="text-sm text-on-surface-variant mb-3">${e.message}. The backend may be waking up — please wait 30 seconds and retry.</p>
+        <button onclick="selectPatient('${patientId}','${patientName}')" class="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-blue-800 transition-colors">Retry</button>
+      </div>`;
+    resultsEl.classList.remove('hidden');
   }
-  // Scroll to top
-  window.scrollTo(0, 0);
+}
+
+function renderBriefing(d) {
+  const a = d.anomaly_flag;
+  const lc = {CRITICAL:'red',URGENT:'orange',WARNING:'yellow',NORMAL:'green'}[a.level]||'blue';
+  const le = {CRITICAL:'🚨',URGENT:'⚠️',WARNING:'🔶',NORMAL:'✅'}[a.level]||'ℹ️';
+
+  const anomalyHtml = a.triggered
+    ? `<div class="bg-${lc}-50 border border-${lc}-200 border-l-4 border-l-${lc}-500 rounded-xl p-4 mb-5">
+        <p class="font-bold text-${lc}-700 mb-2">${le} ${a.level} — Vital Anomaly Detected</p>
+        ${a.reasons.map(r=>`<p class="text-sm text-${lc}-600 flex items-center gap-1 mb-1"><span class="material-symbols-outlined text-sm">arrow_right</span>${r}</p>`).join('')}
+      </div>`
+    : `<div class="bg-green-50 border border-green-200 border-l-4 border-l-green-500 rounded-xl p-4 mb-5"><p class="font-bold text-green-700">✅ All vitals within acceptable ranges</p></div>`;
+
+  const memHtml = d.memory_trend
+    ? `<div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-5"><p class="text-sm font-bold text-on-surface mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-base">trending_up</span>Patient Memory Trends</p><pre class="text-xs text-on-surface-variant whitespace-pre-wrap font-mono">${d.memory_trend}</pre></div>` : '';
+
+  const dxHtml = d.diagnoses.map((dx,i)=>{
+    const tc = {critical:'red',high:'orange',moderate:'yellow',low:'green'}[dx.tier]||'blue';
+    return `<div class="bg-white border border-slate-200 rounded-xl p-4 hover:border-primary transition-colors">
+      <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Diagnosis ${String(i+1).padStart(2,'0')}</p>
+      <p class="font-bold text-on-surface mb-1">${dx.condition}</p>
+      <p class="text-sm text-on-surface-variant mb-3">${dx.reasoning}</p>
+      <div class="flex items-center gap-3">
+        <span class="px-2 py-0.5 rounded bg-${tc}-50 text-${tc}-700 border border-${tc}-200 text-[10px] font-black uppercase">${dx.tier}</span>
+        <div class="flex-1 bg-slate-100 rounded-full h-1.5 overflow-hidden"><div class="bg-primary h-full rounded-full conf-bar" style="width:${dx.confidence}%"></div></div>
+        <span class="text-sm font-bold text-primary">${dx.confidence}%</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  const drugHtml = d.drug_warnings.length === 0
+    ? `<div class="bg-green-50 border border-green-200 rounded-xl p-4 text-green-700 font-semibold flex items-center gap-2"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">check_circle</span>No significant drug interactions detected</div>`
+    : d.drug_warnings.map(w=>{
+        const sc = {critical:'red',major:'orange',moderate:'yellow',minor:'green'}[w.severity]||'blue';
+        const icons = {critical:'🔴',major:'🟠',moderate:'🟡',minor:'🟢'};
+        return `<div class="bg-white border border-slate-200 rounded-xl p-4">
+          <p class="font-semibold text-on-surface mb-2">${icons[w.severity]||'⚪'} ${w.drug_a} + ${w.drug_b} <span class="ml-2 px-2 py-0.5 rounded text-[10px] font-black uppercase bg-${sc}-50 text-${sc}-700 border border-${sc}-200">${w.severity}</span></p>
+          <p class="text-sm text-on-surface-variant bg-slate-50 rounded-lg p-3 border-l-2 border-primary">${w.recommendation}</p>
+        </div>`;
+      }).join('');
+
+  const riskHtml = d.risk_scores.map(r=>{
+    const hex = r.score>=70?'#dc2626':r.score>=40?'#d97706':'#16a34a';
+    return `<div class="bg-white border border-slate-200 rounded-xl p-4">
+      <div class="flex justify-between items-center mb-2"><p class="font-bold text-on-surface">${r.condition}</p><p class="text-xl font-black" style="color:${hex}">${r.score}%</p></div>
+      <div class="bg-slate-100 rounded-full h-2 mb-3 overflow-hidden"><div class="h-full rounded-full risk-bar" style="width:${r.score}%;background:${hex}"></div></div>
+      ${r.factors.map(f=>`<p class="text-xs text-on-surface-variant flex items-center gap-1 mb-1"><span class="text-primary text-xs">—</span>${f}</p>`).join('')}
+      <p class="text-xs text-primary mt-2 p-2 bg-blue-50 rounded-lg border-l-2 border-primary">${r.recommendation}</p>
+    </div>`;
+  }).join('');
+
+  const opHtml = d.second_opinion ? `
+    <div class="bg-green-50 border border-green-200 rounded-xl p-4 mt-5">
+      <p class="text-[10px] font-black uppercase tracking-widest text-green-600 mb-3">🧐 Second Opinion Review</p>
+      <p class="text-sm text-on-surface mb-2"><strong>Challenge:</strong> ${d.second_opinion.challenge}</p>
+      <p class="text-sm text-on-surface mb-3"><strong>Counter-evidence:</strong> ${d.second_opinion.counter_evidence}</p>
+      <p class="text-sm text-green-700 font-semibold bg-green-100 p-3 rounded-lg">✓ ${d.second_opinion.final_recommendation}</p>
+    </div>` : '';
+
+  document.getElementById('briefing-results').innerHTML = `
+    <div class="bg-white border border-slate-200 rounded-xl p-5">
+      <h2 class="text-xl font-bold text-on-surface mb-1">${d.patient_name}</h2>
+      <p class="text-sm text-on-surface-variant">${d.summary}</p>
+    </div>
+    ${anomalyHtml}${memHtml}
+    <h3 class="text-sm font-black uppercase tracking-wider text-on-surface border-b border-slate-200 pb-2">Differential Diagnosis</h3>
+    <div class="space-y-3">${dxHtml}</div>
+    ${opHtml}
+    <h3 class="text-sm font-black uppercase tracking-wider text-on-surface border-b border-slate-200 pb-2 mt-5">Drug Interaction Matrix</h3>
+    <div class="space-y-3">${drugHtml}</div>
+    <h3 class="text-sm font-black uppercase tracking-wider text-on-surface border-b border-slate-200 pb-2 mt-5">Risk Scores</h3>
+    <div class="space-y-3">${riskHtml}</div>
+  `;
+  document.getElementById('briefing-results').classList.remove('hidden');
+}
+
+function renderSOAP(d) {
+  if(!d.soap_note) return;
+  const s = d.soap_note;
+  document.getElementById('soap-results').innerHTML = `
+    <div class="bg-white border border-slate-200 rounded-xl p-5 mb-4 flex items-center justify-between">
+      <div>
+        <h2 class="text-lg font-bold text-on-surface">${d.patient_name} — SOAP Note</h2>
+        <p class="text-xs text-on-surface-variant mt-1">Generated ${new Date(d.generated_at).toLocaleString()}</p>
+      </div>
+      <button onclick="copySOAP()" class="px-4 py-2 border border-primary text-primary text-sm font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm">content_copy</span>Copy
+      </button>
+    </div>
+    ${[['S — Subjective',s.subjective,'🗣️'],['O — Objective',s.objective,'🔬'],['A — Assessment',s.assessment,'🧠'],['P — Plan',s.plan,'📋']].map(([l,c,e])=>`
+      <div class="bg-white border border-slate-200 rounded-xl p-5 mb-3">
+        <p class="text-[10px] font-black uppercase tracking-widest text-primary mb-3">${e} ${l}</p>
+        <p class="text-sm text-on-surface leading-relaxed">${c}</p>
+      </div>`).join('')}
+    <p class="text-xs text-slate-400 text-center mt-3">Auto-generated · MediCopilot v1.0</p>`;
+  document.getElementById('soap-empty').classList.add('hidden');
+  document.getElementById('soap-results').classList.remove('hidden');
+}
+
+function copySOAP() {
+  if(!currentData) return;
+  const s = currentData.soap_note;
+  navigator.clipboard.writeText(`SUBJECTIVE:
+${s.subjective}
+
+OBJECTIVE:
+${s.objective}
+
+ASSESSMENT:
+${s.assessment}
+
+PLAN:
+${s.plan}`)
+    .then(()=>alert('SOAP note copied!'));
+}
+
+function renderAgents(d) {
+  if(!d.reasoning_trace) return;
+  document.getElementById('agents-results').innerHTML = `
+    <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+        <p class="font-bold text-on-surface">9/9 Agents Completed · ${d.patient_name}</p>
+      </div>
+      <span class="text-xs text-on-surface-variant">${new Date(d.generated_at).toLocaleTimeString()}</span>
+    </div>
+    ${d.reasoning_trace.map((step,i)=>`
+      <div class="bg-white border border-slate-200 rounded-xl p-4 flex gap-4 hover:border-primary transition-colors">
+        <div class="flex-shrink-0 w-8 h-8 bg-primary-fixed rounded-lg flex items-center justify-center">
+          <span class="text-xs font-black text-primary">${String(i+1).padStart(2,'0')}</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-bold text-on-surface mb-0.5">${step.agent}</p>
+          <p class="text-xs text-on-surface-variant mb-0.5">${step.action}</p>
+          <p class="text-xs text-primary italic">${step.finding}</p>
+        </div>
+        <span class="material-symbols-outlined text-green-500 flex-shrink-0" style="font-variation-settings:'FILL' 1">check_circle</span>
+      </div>`).join('')}
+    ${d.rag_citations?.length ? `
+      <h3 class="text-sm font-black uppercase tracking-wider text-on-surface border-b border-slate-200 pb-2 mt-5 mb-3">RAG Citations</h3>
+      ${d.rag_citations.map((c,i)=>`
+        <div class="bg-slate-50 border border-slate-200 border-l-4 border-l-primary rounded-xl p-4 mb-3">
+          <p class="text-[10px] font-bold text-primary uppercase mb-2">Guideline ${i+1}</p>
+          <p class="text-xs text-on-surface-variant font-mono leading-relaxed">${c}</p>
+        </div>`).join('')}` : ''}`;
+  document.getElementById('agents-empty').classList.add('hidden');
+  document.getElementById('agents-results').classList.remove('hidden');
 }
 </script>
 </body>
