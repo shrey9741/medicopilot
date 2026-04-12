@@ -1,7 +1,6 @@
 """
-Mock FHIR client - simulates a real FHIR R4 server response.
-In production, replace get_patient_bundle() with actual FHIR API calls
-using the fhir_token from SHARP context.
+Mock FHIR client — simulates a real FHIR R4 server response.
+13 patients covering diverse clinical scenarios.
 """
 from models.schemas import PatientBundle, VitalSigns
 
@@ -68,190 +67,190 @@ MOCK_PATIENTS = {
         name="Patricia Williams",
         age=54,
         gender="Female",
-        conditions=["Stage III Breast Cancer (HER2+)", "Chemotherapy-induced Nausea", "Anemia"],
-        medications=["Trastuzumab 6mg/kg IV", "Pertuzumab 420mg IV", "Ondansetron 8mg", "Ferrous Sulfate 325mg", "Dexamethasone 4mg"],
-        allergies=["Taxol (hypersensitivity)"],
+        conditions=["Breast Cancer HER2+", "Chemotherapy-induced Neuropathy", "Hypertension"],
+        medications=["Trastuzumab", "Pertuzumab", "Docetaxel", "Amlodipine 5mg", "Ondansetron 8mg"],
+        allergies=["Taxanes (hypersensitivity)", "Contrast dye"],
         recent_vitals=VitalSigns(
-            blood_pressure="112/70",
-            heart_rate=96,
-            glucose=88,
-            bmi=22.1,
-            temperature=99.4,
+            blood_pressure="142/88",
+            heart_rate=76,
+            glucose=105,
+            bmi=24.8,
+            temperature=98.4,
             oxygen_saturation=98
         ),
         last_visit="2025-12-10",
-        observations=["Hemoglobin 9.2 g/dL", "Neutropenia ANC 1200", "LVEF 58% on recent echo", "CA 15-3 elevated at 48 U/mL"]
+        observations=["Cycle 4 of chemotherapy", "Grade 2 peripheral neuropathy", "LVEF 58% on recent echo", "Neutrophil count 1.8 (mild neutropenia)"]
     ),
     "P005": PatientBundle(
         patient_id="P005",
         name="Robert Nguyen",
         age=67,
         gender="Male",
-        conditions=["Stage IV Non-Small Cell Lung Cancer", "COPD", "Hypertension", "Cachexia"],
-        medications=["Pembrolizumab 200mg IV", "Amlodipine 5mg", "Tiotropium inhaler", "Megestrol 160mg", "Morphine SR 30mg"],
-        allergies=["Cisplatin (nephrotoxicity)"],
+        conditions=["Lung Cancer Stage IV (NSCLC)", "COPD", "Type 2 Diabetes"],
+        medications=["Pembrolizumab", "Metformin 500mg", "Tiotropium inhaler", "Dexamethasone 4mg", "Omeprazole 20mg"],
+        allergies=["Platinum compounds"],
         recent_vitals=VitalSigns(
-            blood_pressure="130/82",
-            heart_rate=91,
-            glucose=102,
-            bmi=18.3,
-            temperature=98.8,
+            blood_pressure="128/78",
+            heart_rate=82,
+            glucose=188,
+            bmi=21.3,
+            temperature=98.9,
             oxygen_saturation=93
         ),
         last_visit="2025-11-28",
-        observations=["Weight loss 12kg over 3 months", "PD-L1 expression 70%", "CT: stable primary, new adrenal metastasis", "ECOG performance status 2"]
+        observations=["Performance status ECOG 2", "Pleural effusion right side", "SpO2 drops to 88% on exertion", "PD-L1 expression 60%"]
     ),
     "P006": PatientBundle(
         patient_id="P006",
         name="Aiden Patel",
         age=8,
         gender="Male",
-        conditions=["Type 1 Diabetes", "Asthma (Moderate Persistent)", "ADHD"],
-        medications=["Insulin Glargine 12 units", "Insulin Lispro sliding scale", "Fluticasone 44mcg inhaler", "Albuterol PRN", "Methylphenidate 10mg"],
-        allergies=["Amoxicillin (rash)"],
+        conditions=["Type 1 Diabetes", "Asthma", "Celiac Disease"],
+        medications=["Insulin Glargine 10 units", "Insulin Lispro sliding scale", "Albuterol inhaler PRN", "Fluticasone inhaler"],
+        allergies=["Gluten", "Egg"],
         recent_vitals=VitalSigns(
             blood_pressure="100/65",
             heart_rate=92,
-            glucose=185,
-            bmi=17.2,
-            temperature=98.4,
-            oxygen_saturation=98
+            glucose=285,
+            bmi=16.2,
+            temperature=98.1,
+            oxygen_saturation=99
         ),
         last_visit="2025-12-05",
-        observations=["HbA1c 8.9% - suboptimal control", "Peak flow 78% predicted", "Growth percentile 45th", "Recent hypoglycemic episode at school"]
+        observations=["HbA1c 9.1% (poor control)", "Recent DKA episode 3 weeks ago", "Peak flow 78% predicted", "IgA tissue transglutaminase elevated"]
     ),
     "P007": PatientBundle(
         patient_id="P007",
         name="Lily Thompson",
         age=5,
         gender="Female",
-        conditions=["Acute Lymphoblastic Leukemia (ALL) - Maintenance Phase", "Immunosuppression", "Failure to Thrive"],
-        medications=["Mercaptopurine 50mg/m2", "Methotrexate 20mg/m2 weekly", "Trimethoprim-Sulfamethoxazole (prophylaxis)", "Folic Acid 1mg"],
-        allergies=["None known"],
+        conditions=["Acute Lymphoblastic Leukemia (ALL)", "Anemia", "Febrile Neutropenia"],
+        medications=["Vincristine", "Prednisone", "Methotrexate", "6-Mercaptopurine", "Trimethoprim-Sulfamethoxazole"],
+        allergies=["Asparaginase"],
         recent_vitals=VitalSigns(
-            blood_pressure="90/58",
-            heart_rate=105,
-            glucose=78,
-            bmi=13.8,
-            temperature=100.1,
-            oxygen_saturation=99
+            blood_pressure="95/60",
+            heart_rate=118,
+            glucose=92,
+            bmi=14.8,
+            temperature=101.2,
+            oxygen_saturation=98
         ),
-        last_visit="2025-12-12",
-        observations=["WBC 2.1 (leukopenic)", "Platelets 85,000", "Weight 3rd percentile for age", "Bone marrow remission confirmed at 12 months"]
+        last_visit="2025-12-08",
+        observations=["ANC 0.4 (severe neutropenia)", "Hemoglobin 7.8 g/dL", "Fever 101.2F — febrile neutropenia protocol", "Day 22 of induction chemotherapy"]
     ),
     "P008": PatientBundle(
         patient_id="P008",
         name="Diana Foster",
         age=34,
         gender="Female",
-        conditions=["Bipolar I Disorder", "Generalized Anxiety Disorder", "Hypothyroidism", "Obesity"],
-        medications=["Lithium Carbonate 900mg", "Quetiapine 200mg", "Sertraline 100mg", "Levothyroxine 75mcg", "Lorazepam 0.5mg PRN"],
-        allergies=["Valproate (hepatotoxicity)"],
+        conditions=["Bipolar I Disorder", "Generalized Anxiety Disorder", "Hypothyroidism"],
+        medications=["Lithium 600mg BID", "Quetiapine 200mg", "Clonazepam 0.5mg", "Levothyroxine 75mcg"],
+        allergies=["Valproate (hepatotoxicity)", "Carbamazepine (rash)"],
         recent_vitals=VitalSigns(
-            blood_pressure="128/80",
+            blood_pressure="118/74",
             heart_rate=78,
-            glucose=105,
-            bmi=31.4,
+            glucose=98,
+            bmi=26.1,
             temperature=98.3,
             oxygen_saturation=99
         ),
         last_visit="2025-11-20",
-        observations=["Lithium level 0.6 mEq/L (low therapeutic)", "TSH 4.8 (borderline)", "PHQ-9 score 14 (moderate depression)", "Recent manic episode 6 weeks ago"]
+        observations=["Lithium level 0.6 mEq/L (low therapeutic)", "TSH 4.8 (mildly elevated)", "PHQ-9 score 12 (moderate depression)", "Mild tremor noted on exam"]
     ),
     "P009": PatientBundle(
         patient_id="P009",
         name="Carlos Rivera",
         age=28,
         gender="Male",
-        conditions=["Schizophrenia", "Substance Use Disorder (Cannabis)", "Metabolic Syndrome"],
-        medications=["Clozapine 300mg", "Metformin 500mg", "Atorvastatin 10mg"],
-        allergies=["Haloperidol (severe EPS)", "Risperidone (NMS)"],
+        conditions=["Schizophrenia", "Substance Use Disorder (Cannabis)", "Hypertension"],
+        medications=["Risperidone 4mg", "Benztropine 1mg", "Amlodipine 5mg"],
+        allergies=["Haloperidol (severe EPS)", "Clozapine (agranulocytosis)"],
         recent_vitals=VitalSigns(
-            blood_pressure="138/88",
-            heart_rate=88,
-            glucose=118,
-            bmi=34.2,
-            temperature=98.7,
+            blood_pressure="138/86",
+            heart_rate=84,
+            glucose=108,
+            bmi=28.9,
+            temperature=98.5,
             oxygen_saturation=98
         ),
-        last_visit="2025-10-30",
-        observations=["ANC 1800 (clozapine monitoring)", "Fasting triglycerides 280 mg/dL", "PANSS score 62 (moderate symptoms)", "Cannabis use 3-4x weekly reported"]
+        last_visit="2025-11-15",
+        observations=["Medication adherence poor (missed 3 doses this week)", "Positive symptoms: auditory hallucinations", "Fasting glucose borderline", "Extrapyramidal symptoms mild"]
     ),
     "P010": PatientBundle(
         patient_id="P010",
         name="Eleanor Voss",
         age=41,
         gender="Female",
-        conditions=["Systemic Lupus Erythematosus (SLE)", "Lupus Nephritis Class III", "Antiphospholipid Syndrome", "Anemia of Chronic Disease"],
-        medications=["Hydroxychloroquine 400mg", "Mycophenolate Mofetil 1500mg", "Prednisone 10mg", "Warfarin 4mg", "Vitamin D 2000 IU"],
-        allergies=["Sulfa drugs", "NSAIDs (renal exacerbation)"],
+        conditions=["Systemic Lupus Erythematosus", "Antiphospholipid Syndrome", "Lupus Nephritis Class III"],
+        medications=["Hydroxychloroquine 400mg", "Mycophenolate 1500mg BID", "Prednisone 10mg", "Warfarin 7.5mg", "Calcium + Vitamin D"],
+        allergies=["NSAIDs (renal flare)", "Sulfa drugs"],
         recent_vitals=VitalSigns(
-            blood_pressure="142/88",
-            heart_rate=84,
+            blood_pressure="145/92",
+            heart_rate=88,
             glucose=112,
-            bmi=23.6,
-            temperature=99.2,
+            bmi=23.4,
+            temperature=99.0,
             oxygen_saturation=97
         ),
-        last_visit="2025-12-08",
-        observations=["Proteinuria 1.8g/24hr", "Complement C3 low at 62 mg/dL", "Anti-dsDNA titre rising 1:320", "INR 2.4 (therapeutic)", "Hemoglobin 10.1 g/dL"]
+        last_visit="2025-12-03",
+        observations=["Proteinuria 2.1g/24hr (worsening)", "Complement C3 low 68", "Anti-dsDNA elevated 1:320", "INR 2.1 (therapeutic)", "Malar rash present"]
     ),
     "P011": PatientBundle(
         patient_id="P011",
         name="Samuel Okafor",
         age=19,
         gender="Male",
-        conditions=["Cystic Fibrosis (F508del homozygous)", "CF-related Diabetes", "Pancreatic Exocrine Insufficiency", "Chronic Pseudomonas Infection"],
-        medications=["Elexacaftor/Tezacaftor/Ivacaftor (Trikafta)", "Insulin Aspart sliding scale", "Creon 12000 units with meals", "Tobramycin inhaled", "Azithromycin 250mg"],
+        conditions=["Cystic Fibrosis (F508del homozygous)", "CF-related Diabetes", "Chronic Pseudomonas Infection"],
+        medications=["Elexacaftor/Tezacaftor/Ivacaftor", "Tobramycin inhaled", "Dornase alfa", "Insulin Glargine 8 units", "Azithromycin 500mg 3x/week"],
         allergies=["Ciprofloxacin (tendinopathy)"],
         recent_vitals=VitalSigns(
-            blood_pressure="108/68",
+            blood_pressure="112/70",
             heart_rate=88,
-            glucose=165,
-            bmi=19.1,
-            temperature=99.6,
+            glucose=195,
+            bmi=18.1,
+            temperature=98.8,
             oxygen_saturation=94
         ),
-        last_visit="2025-11-15",
-        observations=["FEV1 62% predicted - stable post-Trikafta", "Sputum Pseudomonas aeruginosa +ve", "Fecal elastase < 100 mcg/g", "HbA1c 7.8%", "BMI low - nutritional support ongoing"]
+        last_visit="2025-11-30",
+        observations=["FEV1 58% predicted (decline from 65%)", "Sputum culture: Pseudomonas aeruginosa", "HbA1c 7.8%", "Weight loss 3kg over 3 months"]
     ),
     "P012": PatientBundle(
         patient_id="P012",
         name="Ingrid Larsson",
         age=37,
         gender="Female",
-        conditions=["Multiple Sclerosis (Relapsing-Remitting)", "Neurogenic Bladder", "Major Depressive Disorder", "Vitamin D Deficiency"],
-        medications=["Natalizumab 300mg IV monthly", "Oxybutynin 5mg", "Duloxetine 60mg", "Vitamin D3 5000 IU", "Baclofen 10mg"],
-        allergies=["Interferon beta (severe flu-like reaction)"],
+        conditions=["Multiple Sclerosis (Relapsing-Remitting)", "Depression", "Osteoporosis"],
+        medications=["Natalizumab 300mg IV monthly", "Sertraline 100mg", "Vitamin D3 2000 IU", "Calcium Carbonate 1200mg", "Baclofen 10mg TID"],
+        allergies=["Interferon beta (flu-like reaction)", "Glatiramer acetate (injection site)"],
         recent_vitals=VitalSigns(
-            blood_pressure="118/74",
-            heart_rate=72,
-            glucose=88,
-            bmi=24.3,
-            temperature=98.1,
+            blood_pressure="115/72",
+            heart_rate=74,
+            glucose=90,
+            bmi=22.8,
+            temperature=98.2,
             oxygen_saturation=99
         ),
-        last_visit="2025-12-03",
-        observations=["JC virus antibody index 2.8 (high PML risk)", "EDSS score 3.5", "25-OH Vitamin D 18 ng/mL (deficient)", "PHQ-9 score 16 (moderate-severe depression)", "New T2 lesion on MRI - no gadolinium enhancement"]
+        last_visit="2025-12-01",
+        observations=["New T2 lesion on MRI brain", "JC virus antibody index 2.8 (high PML risk)", "EDSS score 3.5", "PHQ-9 score 14 (moderate-severe depression)"]
     ),
     "P013": PatientBundle(
         patient_id="P013",
         name="Theo Blackwood",
         age=52,
         gender="Male",
-        conditions=["Amyotrophic Lateral Sclerosis (ALS)", "Respiratory Insufficiency", "Dysphagia", "Insomnia"],
-        medications=["Riluzole 50mg", "Edaravone 60mg IV", "Baclofen 20mg", "Melatonin 5mg", "Glycopyrrolate 1mg (secretions)"],
-        allergies=["None known"],
+        conditions=["ALS (Amyotrophic Lateral Sclerosis)", "Dysphagia", "Respiratory Failure (early)"],
+        medications=["Riluzole 50mg BID", "Edaravone 60mg IV", "Baclofen 20mg TID", "Glycopyrrolate 1mg TID", "Modafinil 200mg"],
+        allergies=["Morphine (hypersensitivity)"],
         recent_vitals=VitalSigns(
-            blood_pressure="122/76",
-            heart_rate=78,
-            glucose=94,
-            bmi=21.8,
-            temperature=97.9,
-            oxygen_saturation=92
+            blood_pressure="122/78",
+            heart_rate=72,
+            glucose=95,
+            bmi=20.1,
+            temperature=98.0,
+            oxygen_saturation=94
         ),
-        last_visit="2025-12-01",
-        observations=["FVC 48% predicted - BiPAP initiated", "Dysphagia moderate - PEG tube discussed", "EMG: widespread active denervation", "ALSFRS-R score 28 (moderate-severe)", "Bulbar symptoms progressing"]
+        last_visit="2025-11-25",
+        observations=["FVC 62% predicted (declining)", "Bulbar symptoms progressing", "PEG tube placement discussed", "NIV initiated at night", "ALSFRS-R score 32 (moderate disability)"]
     ),
 }
 
@@ -271,64 +270,50 @@ MOCK_HISTORY = {
         {"date": "2025-10-22", "glucose": 245, "bp": "155/98", "hr": 95, "note": "Critical multi-system decline"},
     ],
     "P004": [
-        {"date": "2025-10-01", "glucose": 92, "bp": "118/72", "hr": 88, "note": "Cycle 4 chemo - tolerated well"},
-        {"date": "2025-11-05", "glucose": 85, "bp": "110/68", "hr": 94, "note": "Hemoglobin dropping, fatigue++"},
-        {"date": "2025-12-10", "glucose": 88, "bp": "112/70", "hr": 96, "note": "Neutropenia noted post cycle 6"},
+        {"date": "2025-10-15", "glucose": 98, "bp": "138/85", "hr": 74, "note": "Pre-chemo baseline"},
+        {"date": "2025-11-15", "glucose": 102, "bp": "140/87", "hr": 76, "note": "Cycle 3 completed"},
+        {"date": "2025-12-10", "glucose": 105, "bp": "142/88", "hr": 76, "note": "Neuropathy grade 2"},
     ],
     "P005": [
-        {"date": "2025-09-15", "glucose": 98, "bp": "134/84", "hr": 88, "note": "Started pembrolizumab"},
-        {"date": "2025-10-20", "glucose": 100, "bp": "132/82", "hr": 90, "note": "Weight loss accelerating"},
-        {"date": "2025-11-28", "glucose": 102, "bp": "130/82", "hr": 91, "note": "New adrenal metastasis on CT"},
+        {"date": "2025-09-28", "glucose": 175, "bp": "130/80", "hr": 80, "note": "Immunotherapy started"},
+        {"date": "2025-11-28", "glucose": 188, "bp": "128/78", "hr": 82, "note": "Pleural effusion noted"},
     ],
     "P006": [
-        {"date": "2025-09-10", "glucose": 172, "bp": "98/62", "hr": 90, "note": "Pump settings adjusted"},
-        {"date": "2025-10-25", "glucose": 168, "bp": "100/64", "hr": 91, "note": "Asthma flare - steroid burst"},
-        {"date": "2025-12-05", "glucose": 185, "bp": "100/65", "hr": 92, "note": "HbA1c remains elevated"},
+        {"date": "2025-10-01", "glucose": 240, "bp": "98/62", "hr": 95, "note": "HbA1c 8.8%"},
+        {"date": "2025-12-05", "glucose": 285, "bp": "100/65", "hr": 92, "note": "DKA episode 3 weeks prior"},
     ],
     "P007": [
-        {"date": "2025-08-01", "glucose": 82, "bp": "88/56", "hr": 108, "note": "Maintenance chemo started"},
-        {"date": "2025-10-10", "glucose": 79, "bp": "90/58", "hr": 106, "note": "ANC nadir - held MTX one week"},
-        {"date": "2025-12-12", "glucose": 78, "bp": "90/58", "hr": 105, "note": "Fever - infection screen ordered"},
+        {"date": "2025-11-01", "glucose": 88, "bp": "92/58", "hr": 112, "note": "Induction day 1"},
+        {"date": "2025-12-08", "glucose": 92, "bp": "95/60", "hr": 118, "note": "Febrile neutropenia"},
     ],
     "P008": [
-        {"date": "2025-09-05", "glucose": 98, "bp": "124/78", "hr": 76, "note": "Lithium level stable 0.8"},
-        {"date": "2025-10-18", "glucose": 102, "bp": "126/80", "hr": 80, "note": "Manic episode - dose adjusted"},
-        {"date": "2025-11-20", "glucose": 105, "bp": "128/80", "hr": 78, "note": "Lithium level dropped - non-compliance"},
+        {"date": "2025-09-20", "glucose": 95, "bp": "115/72", "hr": 76, "note": "Lithium adjusted"},
+        {"date": "2025-11-20", "glucose": 98, "bp": "118/74", "hr": 78, "note": "Mild depressive episode"},
     ],
     "P009": [
-        {"date": "2025-08-15", "glucose": 110, "bp": "136/86", "hr": 86, "note": "ANC monitoring - borderline"},
-        {"date": "2025-09-28", "glucose": 114, "bp": "138/88", "hr": 87, "note": "Cannabis use disclosed"},
-        {"date": "2025-10-30", "glucose": 118, "bp": "138/88", "hr": 88, "note": "Metabolic syndrome worsening"},
+        {"date": "2025-10-15", "glucose": 104, "bp": "135/84", "hr": 82, "note": "Medication compliance issues"},
+        {"date": "2025-11-15", "glucose": 108, "bp": "138/86", "hr": 84, "note": "Positive symptoms persisting"},
     ],
     "P010": [
-        {"date": "2025-09-20", "glucose": 108, "bp": "138/86", "hr": 82, "note": "Proteinuria increasing"},
-        {"date": "2025-10-25", "glucose": 110, "bp": "140/88", "hr": 83, "note": "Lupus flare - prednisone increased"},
-        {"date": "2025-12-08", "glucose": 112, "bp": "142/88", "hr": 84, "note": "Anti-dsDNA titre rising"},
+        {"date": "2025-10-03", "glucose": 108, "bp": "140/90", "hr": 86, "note": "Proteinuria 1.8g"},
+        {"date": "2025-12-03", "glucose": 112, "bp": "145/92", "hr": 88, "note": "Nephritis flare suspected"},
     ],
     "P011": [
-        {"date": "2025-09-01", "glucose": 158, "bp": "110/70", "hr": 86, "note": "Trikafta month 6 - FEV1 improved"},
-        {"date": "2025-10-10", "glucose": 162, "bp": "108/68", "hr": 87, "note": "Pseudomonas exacerbation - IV tobra"},
-        {"date": "2025-11-15", "glucose": 165, "bp": "108/68", "hr": 88, "note": "BMI still low - dietitian review"},
+        {"date": "2025-09-30", "glucose": 182, "bp": "110/68", "hr": 86, "note": "FEV1 65%"},
+        {"date": "2025-11-30", "glucose": 195, "bp": "112/70", "hr": 88, "note": "FEV1 declined to 58%"},
     ],
     "P012": [
-        {"date": "2025-09-15", "glucose": 85, "bp": "116/72", "hr": 70, "note": "MRI stable - no new lesions"},
-        {"date": "2025-10-28", "glucose": 87, "bp": "118/74", "hr": 71, "note": "JC antibody index rising"},
-        {"date": "2025-12-03", "glucose": 88, "bp": "118/74", "hr": 72, "note": "New T2 lesion - natalizumab review"},
+        {"date": "2025-09-01", "glucose": 88, "bp": "112/70", "hr": 72, "note": "Stable on natalizumab"},
+        {"date": "2025-12-01", "glucose": 90, "bp": "115/72", "hr": 74, "note": "New MRI lesion found"},
     ],
     "P013": [
-        {"date": "2025-09-10", "glucose": 91, "bp": "124/78", "hr": 76, "note": "FVC 58% - monitoring closely"},
-        {"date": "2025-10-20", "glucose": 92, "bp": "122/76", "hr": 77, "note": "Dysphagia worsening - SLT referral"},
-        {"date": "2025-12-01", "glucose": 94, "bp": "122/76", "hr": 78, "note": "FVC 48% - BiPAP initiated"},
+        {"date": "2025-09-25", "glucose": 92, "bp": "120/76", "hr": 70, "note": "FVC 68%"},
+        {"date": "2025-11-25", "glucose": 95, "bp": "122/78", "hr": 72, "note": "FVC declined to 62%"},
     ],
 }
 
 
 def get_patient_bundle(patient_id: str) -> PatientBundle:
-    """
-    Fetch patient FHIR bundle.
-    In production: calls FHIR server using Authorization: Bearer {fhir_token}
-    GET /fhir/R4/Patient/{patient_id}/$everything
-    """
     patient = MOCK_PATIENTS.get(patient_id)
     if not patient:
         return MOCK_PATIENTS["P001"]
@@ -336,5 +321,4 @@ def get_patient_bundle(patient_id: str) -> PatientBundle:
 
 
 def get_patient_history(patient_id: str) -> list:
-    """Returns timestamped visit history for temporal memory."""
     return MOCK_HISTORY.get(patient_id, [])
