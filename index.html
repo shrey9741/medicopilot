@@ -447,7 +447,7 @@ tailwind.config = {
   </div>
 
   <!-- AGENT STATUS -->
-   
+
   <div id="page-agents" class="page fade-in p-6">
     <div class="mb-5">
       <h1 class="text-2xl font-extrabold text-on-surface">Agent Orchestration</h1>
@@ -465,6 +465,7 @@ tailwind.config = {
 </main>
 
 <!-- FAB -->
+
 <div class="fixed bottom-6 right-6 z-50">
   <button onclick="showPage('briefing')" class="w-13 h-13 w-12 h-12 bg-primary text-white rounded-full shadow-xl flex items-center justify-center hover:scale-110 transition-transform hover:bg-blue-800" title="New Consultation">
     <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">add</span>
@@ -504,6 +505,7 @@ function showPage(name) {
 
 async function selectPatient(patientId, patientName) {
   // Update button states
+  
   document.querySelectorAll('.patient-btn').forEach(b=>b.classList.remove('selected'));
   document.querySelectorAll(`#btn-${patientId}, #soap-btn-${patientId}`).forEach(b=>b.classList.add('selected'));
 
