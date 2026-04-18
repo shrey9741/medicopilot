@@ -25,6 +25,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Agent cards (always visible) ──
+
 agents_info = [
     ("🏥","FHIRAgent",          "Fetches patient bundle from FHIR R4"),
     ("📈","MemoryAgent",        "Analyzes visit history for trends"),
@@ -42,6 +43,7 @@ last_patient = st.session_state.get("last_patient")
 trace       = data.get("reasoning_trace", []) if data else []
 
 # Show agent cards with live status if trace available
+
 cols = st.columns(3)
 for i, (emoji, name, desc) in enumerate(agents_info):
     # Find this agent in trace

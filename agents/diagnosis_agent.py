@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
+
 def run_diagnosis_agent(
     patient: PatientBundle,
     rag_context: list[str],
@@ -38,6 +39,7 @@ PATIENT DATA:
 - Observations: {', '.join(patient.observations)}
 {trend_section}
 {anomaly_section}
+
 
 RELEVANT MEDICAL GUIDELINES:
 {rag_text}
