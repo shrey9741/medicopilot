@@ -79,13 +79,14 @@ def run_medicopilot(
     ))
 
     # ── Step 5: Diagnosis sub-agent ──────────────────────────────────────────
-    
+
     diagnoses, next_steps, dx_steps = run_diagnosis_agent(
         patient, rag_context, memory_trend, anomaly_summary
     )
     reasoning_trace.extend(dx_steps)
 
     # ── Step 6: Drug safety sub-agent ───────────────────────────────────────
+    
     drug_rag = retrieve_context(f"drug interactions {' '.join(patient.medications[:3])}", vectorstore, k=2)
     drug_warnings, drug_steps = run_drug_agent(
         patient.medications, patient.conditions, patient.allergies, drug_rag
