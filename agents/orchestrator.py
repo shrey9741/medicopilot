@@ -86,7 +86,7 @@ def run_medicopilot(
     reasoning_trace.extend(dx_steps)
 
     # ── Step 6: Drug safety sub-agent ───────────────────────────────────────
-    
+
     drug_rag = retrieve_context(f"drug interactions {' '.join(patient.medications[:3])}", vectorstore, k=2)
     drug_warnings, drug_steps = run_drug_agent(
         patient.medications, patient.conditions, patient.allergies, drug_rag
@@ -94,6 +94,7 @@ def run_medicopilot(
     reasoning_trace.extend(drug_steps)
 
     # ── Step 7: Risk scoring sub-agent ──────────────────────────────────────
+    
     risk_rag = retrieve_context(f"cardiovascular risk {patient.age} year old {' '.join(patient.conditions[:2])}", vectorstore, k=2)
     risk_scores, risk_steps = run_risk_agent(patient, risk_rag)
     reasoning_trace.extend(risk_steps)
