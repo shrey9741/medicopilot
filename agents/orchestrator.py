@@ -68,7 +68,7 @@ def run_medicopilot(
     anomaly_summary = "\n".join(anomaly.reasons) if anomaly.triggered else ""
 
     # ── Step 4: RAG knowledge retrieval ─────────────────────────────────────
-    
+
     rag_query = f"{' '.join(patient.conditions)} {' '.join(patient.medications[:2])}"
     rag_context = retrieve_context(rag_query, vectorstore, k=4)
 
@@ -79,6 +79,7 @@ def run_medicopilot(
     ))
 
     # ── Step 5: Diagnosis sub-agent ──────────────────────────────────────────
+    
     diagnoses, next_steps, dx_steps = run_diagnosis_agent(
         patient, rag_context, memory_trend, anomaly_summary
     )
