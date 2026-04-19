@@ -105,7 +105,7 @@ def run_medicopilot(
     reasoning_trace.append(opinion_step)
 
     # ── Step 9: SOAP note generation ────────────────────────────────────────
-    
+
     soap_note, soap_step = generate_soap_note(
         patient, diagnoses, drug_warnings, risk_scores,
         second_opinion, next_steps, memory_trend
@@ -113,6 +113,7 @@ def run_medicopilot(
     reasoning_trace.append(soap_step)
 
     # ── Step 10: Build summary ───────────────────────────────────────────────
+    
     top_dx = diagnoses[0].condition if diagnoses else "Assessment pending"
     top_risk = max(risk_scores, key=lambda x: x.score) if risk_scores else None
     drug_alert = f"{len(drug_warnings)} drug interaction(s) flagged." if drug_warnings else "No drug interactions."
