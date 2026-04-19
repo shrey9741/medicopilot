@@ -94,12 +94,13 @@ def run_medicopilot(
     reasoning_trace.extend(drug_steps)
 
     # ── Step 7: Risk scoring sub-agent ──────────────────────────────────────
-    
+
     risk_rag = retrieve_context(f"cardiovascular risk {patient.age} year old {' '.join(patient.conditions[:2])}", vectorstore, k=2)
     risk_scores, risk_steps = run_risk_agent(patient, risk_rag)
     reasoning_trace.extend(risk_steps)
 
     # ── Step 8: Second opinion (Point 7) ────────────────────────────────────
+    
     second_opinion, opinion_step = run_second_opinion(patient, diagnoses, drug_warnings)
     reasoning_trace.append(opinion_step)
 
