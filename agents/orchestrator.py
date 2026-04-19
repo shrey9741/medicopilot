@@ -100,11 +100,12 @@ def run_medicopilot(
     reasoning_trace.extend(risk_steps)
 
     # ── Step 8: Second opinion (Point 7) ────────────────────────────────────
-    
+
     second_opinion, opinion_step = run_second_opinion(patient, diagnoses, drug_warnings)
     reasoning_trace.append(opinion_step)
 
     # ── Step 9: SOAP note generation ────────────────────────────────────────
+    
     soap_note, soap_step = generate_soap_note(
         patient, diagnoses, drug_warnings, risk_scores,
         second_opinion, next_steps, memory_trend
