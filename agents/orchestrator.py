@@ -42,7 +42,7 @@ def run_medicopilot(
     ))
 
     # ── Step 2: Load memory and analyze trends (Point 4) ────────────────────
-    
+
     load_history(patient_id, fhir_history)
     update_memory(patient)
     memory_trend = analyze_trends(patient_id)
@@ -55,6 +55,7 @@ def run_medicopilot(
         ))
 
     # ── Step 3: Vital anomaly detection (Point 9) ───────────────────────────
+    
     anomaly = detect_anomalies(patient)
 
     if anomaly.triggered:
