@@ -31,6 +31,7 @@ def run_medicopilot(
     reasoning_trace: list[ReasoningStep] = []
 
     # ── Step 1: Fetch FHIR patient data ─────────────────────────────────────
+
     patient = get_patient_bundle(patient_id)
     fhir_history = get_patient_history(patient_id)
 
@@ -41,6 +42,7 @@ def run_medicopilot(
     ))
 
     # ── Step 2: Load memory and analyze trends (Point 4) ────────────────────
+    
     load_history(patient_id, fhir_history)
     update_memory(patient)
     memory_trend = analyze_trends(patient_id)

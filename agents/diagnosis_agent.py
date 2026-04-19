@@ -39,7 +39,7 @@ PATIENT DATA:
 - Observations: {', '.join(patient.observations)}
 {trend_section}
 {anomaly_section}
-
+ 
 
 RELEVANT MEDICAL GUIDELINES:
 {rag_text}
