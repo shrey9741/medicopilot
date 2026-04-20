@@ -25,6 +25,7 @@ def detect_anomalies(patient: PatientBundle) -> AnomalyFlag:
     systolic, diastolic = _parse_bp(vitals.blood_pressure)
 
     # --- Blood pressure rules ---
+    
     if systolic >= 180 or diastolic >= 120:
         reasons.append(f"HYPERTENSIVE CRISIS: BP {vitals.blood_pressure} (≥180/120)")
     elif systolic >= 160 or diastolic >= 100:
