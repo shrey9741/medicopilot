@@ -41,7 +41,6 @@ configure_logging()
 logger = structlog.get_logger("main")
 
 # Global vectorstore — loaded once at startup, just like before
-
 vectorstore = None
 
 @asynccontextmanager
