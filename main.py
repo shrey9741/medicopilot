@@ -11,6 +11,7 @@ Everything from the original is preserved:
   - run_medicopilot orchestrator (unchanged)
   - All original endpoints still work
 """
+
 import os
 import asyncio
 from contextlib import asynccontextmanager
