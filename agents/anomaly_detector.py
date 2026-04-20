@@ -33,7 +33,6 @@ def detect_anomalies(patient: PatientBundle) -> AnomalyFlag:
         reasons.append(f"Stage 2 hypertension: {vitals.blood_pressure}")
 
     # --- Glucose rules ---
-    
     if vitals.glucose >= 400:
         reasons.append(f"CRITICAL hyperglycemia: glucose {vitals.glucose} mg/dL (≥400)")
     elif vitals.glucose >= 300:
