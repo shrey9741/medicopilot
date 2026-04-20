@@ -30,6 +30,7 @@ from routes.auth_router import router as auth_router
 from fhir.hapi_client import get_patient_data, HAPIFHIRClient
 
 # ── Original modules (unchanged) ─────────────────────────────────────
+
 from rag.retriever import load_vectorstore
 from agents.orchestrator import run_medicopilot
 from models.schemas import InvokeRequest, MediCopilotResponse
@@ -39,6 +40,7 @@ configure_logging()
 logger = structlog.get_logger("main")
 
 # Global vectorstore — loaded once at startup, just like before
+
 vectorstore = None
 
 
