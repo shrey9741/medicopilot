@@ -22,6 +22,7 @@ from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 
 # ── New modules (Week 1) ─────────────────────────────────────────────
+
 from logging_config import configure_logging
 from middleware import RequestTracingMiddleware
 from auth import get_current_doctor
