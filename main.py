@@ -43,7 +43,6 @@ logger = structlog.get_logger("main")
 
 vectorstore = None
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global vectorstore
@@ -64,6 +63,7 @@ app = FastAPI(
 )
 
 # ── Middleware ────────────────────────────────────────────────────────
+
 app.add_middleware(RequestTracingMiddleware)
 
 app.add_middleware(
