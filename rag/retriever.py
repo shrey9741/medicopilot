@@ -17,6 +17,7 @@ from typing import List
 VECTORSTORE_PATH = Path("rag/vectorstore")
 
 # Built-in medical knowledge base
+
 MEDICAL_KNOWLEDGE = [
     """
     Type 2 Diabetes Management Guidelines (WHO/ADA):
