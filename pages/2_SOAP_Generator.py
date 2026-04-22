@@ -25,7 +25,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Patient selector ──
-
 options = {f"{pid} — {p['name']} ({p['age']}) · {p['conditions']}": pid for pid, p in PATIENTS.items()}
 last_patient = st.session_state.get("last_patient")
 default_idx  = list(options.values()).index(last_patient) if last_patient in list(options.values()) else 0
