@@ -174,6 +174,7 @@ export default function AgentTrace() {
             </div>
 
             {/* Agent Cards */}
+            
             <div style={{ background: '#fff', borderRadius: '12px', padding: '14px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
                 {AGENTS.map((agent) => (
