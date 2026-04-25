@@ -26,6 +26,7 @@ st.markdown("""
 
 # ── Agent cards (always visible) ──
 
+
 agents_info = [
     ("🏥","FHIRAgent",          "Fetches patient bundle from FHIR R4"),
     ("📈","MemoryAgent",        "Analyzes visit history for trends"),
