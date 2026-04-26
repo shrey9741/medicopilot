@@ -26,6 +26,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Patient selector ──
+
 options = {f"{pid} — {p['name']} ({p['age']}) · {p['conditions']}": pid for pid, p in PATIENTS.items()}
 col_sel, col_btn = st.columns([4, 1])
 with col_sel:
