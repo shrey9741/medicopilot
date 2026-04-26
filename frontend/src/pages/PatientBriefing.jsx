@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import API from '../api/client';
+import Sidebar from '../components/Sidebar';
 
 const AGENTS = [
   { name: 'VITAL AGENT', dot: '#1a7a45', msg: 'Monitoring heart rate spikes. Trend analysis initiated.', time: '12:41:02', source: 'Vitals Stream' },
@@ -23,12 +24,9 @@ export default function PatientBriefing() {
     const fetchBriefing = async () => {
       try {
         setLoading(true);
-        const res = await API.post('/invoke', {
-          patient_id: id || 'P001',
-          sharp_token: null,
-        });
+        const res = await API.post('/invoke', { patient_id: id || 'P001', sharp_token: null });
         setBriefing(res.data);
-      } catch (err) {
+      } catch {
         setError('Could not generate briefing. Showing demo data.');
       } finally {
         setLoading(false);
@@ -37,43 +35,9 @@ export default function PatientBriefing() {
     fetchBriefing();
   }, [id]);
 
-  const handleVoice = () => setVoicePlaying(!voicePlaying);
-
-  const Sidebar = () => (
-    <div style={{ width: '220px', minWidth: '220px', height: '100vh', position: 'fixed', left: 0, top: 0, background: 'rgba(248,249,251,0.95)', backdropFilter: 'blur(14px)', display: 'flex', flexDirection: 'column', zIndex: 40 }}>
-      <div style={{ padding: '24px 20px 16px' }}>
-        <div style={{ fontFamily: 'Manrope,sans-serif', fontWeight: 800, fontSize: '15px', color: '#003178' }}>Clinical Sentinel</div>
-        <div style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#9ca3af', marginTop: '2px' }}>Medical AI Copilot</div>
-      </div>
-      <div style={{ padding: '8px 10px', flex: 1, display: 'flex', flexDirection: 'column', gap: '2px' }}>
-        {[
-          { label: 'Dashboard', icon: 'dashboard', path: '/dashboard' },
-          { label: 'Patient Briefing', icon: 'assignment_ind', path: `/patient/${id}`, active: true },
-          { label: 'SOAP Generator', icon: 'history_edu', path: '/soap' },
-          { label: 'Agent Status', icon: 'smart_toy', path: '/agents' },
-        ].map((item) => (
-          <div key={item.label} onClick={() => navigate(item.path)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: item.active ? 700 : 500, color: item.active ? '#003178' : '#5a5e6b', background: item.active ? 'rgba(0,49,120,0.07)' : 'transparent', borderRight: item.active ? '2.5px solid #003178' : '2.5px solid transparent' }}>
-            <span className="material-icons-round" style={{ fontSize: '18px' }}>{item.icon}</span>
-            {item.label}
-          </div>
-        ))}
-      </div>
-      <div style={{ padding: '14px' }}>
-        <button onClick={() => navigate('/dashboard')} style={{ width: '100%', padding: '10px', marginBottom: '12px', background: 'linear-gradient(135deg,#003178,#0d47a1)', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-          <span className="material-icons-round" style={{ fontSize: '16px' }}>arrow_back</span>
-          Back to Dashboard
-        </button>
-        <div style={{ fontSize: '11px', color: '#9ca3af', paddingLeft: '4px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-          <span style={{ cursor: 'pointer' }}>⚙ Settings</span>
-          <span style={{ cursor: 'pointer' }}>? Support</span>
-        </div>
-      </div>
-    </div>
-  );
-
   if (loading) return (
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Inter,sans-serif', background: '#f8f9fb' }}>
-      <Sidebar />
+      <Sidebar activePatientId={id} />
       <div style={{ marginLeft: '220px', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
         <div style={{ width: '48px', height: '48px', border: '4px solid #f2f4f6', borderTop: '4px solid #003178', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
         <div style={{ fontSize: '14px', color: '#9ca3af', fontWeight: 600 }}>Generating AI briefing for patient {id}...</div>
@@ -83,18 +47,17 @@ export default function PatientBriefing() {
     </div>
   );
 
-  // Parse briefing data
   const patientName = briefing?.patient_name || briefing?.name || `Patient ${id}`;
-  const summary = briefing?.summary || briefing?.briefing || '';
-  const diagnoses = briefing?.diagnoses || briefing?.differential_diagnosis || [];
-  const drugWarnings = briefing?.drug_warnings || briefing?.drug_interactions || [];
+  const summary = briefing?.summary || '';
+  const diagnoses = briefing?.diagnoses || [];
+  const drugWarnings = briefing?.drug_warnings || [];
   const riskScores = briefing?.risk_scores || {};
   const soapNote = briefing?.soap_note || {};
   const anomalies = briefing?.anomalies || briefing?.vital_anomalies || [];
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Inter,sans-serif', background: '#f8f9fb' }}>
-      <Sidebar />
+      <Sidebar activePatientId={id} />
       <div style={{ marginLeft: '220px', flex: 1 }}>
 
         {/* Header */}
@@ -115,15 +78,11 @@ export default function PatientBriefing() {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 260px', minHeight: 'calc(100vh - 56px)' }}>
-
-          {/* MAIN */}
           <div style={{ padding: '20px 20px 20px 24px' }}>
 
-            {/* Error banner */}
             {error && (
               <div style={{ background: '#ffecd3', border: '1px solid #f97316', color: '#9b6000', padding: '10px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: 600, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="material-icons-round" style={{ fontSize: '16px' }}>warning</span>
-                {error}
+                <span className="material-icons-round" style={{ fontSize: '16px' }}>warning</span>{error}
               </div>
             )}
 
@@ -148,7 +107,7 @@ export default function PatientBriefing() {
                   </div>
                 ))}
               </div>
-              <button onClick={handleVoice} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: voicePlaying ? '#003178' : 'rgba(0,49,120,0.08)', border: 'none', borderRadius: '20px', color: voicePlaying ? '#fff' : '#003178', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
+              <button onClick={() => setVoicePlaying(!voicePlaying)} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: voicePlaying ? '#003178' : 'rgba(0,49,120,0.08)', border: 'none', borderRadius: '20px', color: voicePlaying ? '#fff' : '#003178', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
                 <span className="material-icons-round" style={{ fontSize: '16px' }}>{voicePlaying ? 'pause' : 'volume_up'}</span>
                 {voicePlaying ? 'Pause Briefing' : 'Play Voice Briefing'}
               </button>
@@ -158,8 +117,7 @@ export default function PatientBriefing() {
             {summary && (
               <div style={{ background: '#fff', borderRadius: '12px', padding: '16px', marginBottom: '14px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', borderLeft: '4px solid #003178' }}>
                 <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#003178', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span className="material-icons-round" style={{ fontSize: '14px' }}>auto_awesome</span>
-                  AI Clinical Summary
+                  <span className="material-icons-round" style={{ fontSize: '14px' }}>auto_awesome</span>AI Clinical Summary
                 </div>
                 <div style={{ fontSize: '13px', color: '#5a5e6b', lineHeight: 1.7 }}>{summary}</div>
               </div>
@@ -173,34 +131,23 @@ export default function PatientBriefing() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
                   <span className="material-icons-round" style={{ fontSize: '16px', color: '#ba1a1a' }}>warning</span>
                   <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#5a5e6b' }}>Vital Anomaly Detection</span>
-                  {anomalies.length > 0 && (
-                    <span style={{ marginLeft: 'auto', background: '#ffdad6', color: '#ba1a1a', fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '10px' }}>{anomalies.length} DETECTED</span>
-                  )}
+                  {anomalies.length > 0 && <span style={{ marginLeft: 'auto', background: '#ffdad6', color: '#ba1a1a', fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '10px' }}>{anomalies.length} DETECTED</span>}
                 </div>
-                {anomalies.length > 0 ? (
-                  anomalies.slice(0, 3).map((a, i) => (
-                    <div key={i} style={{ paddingTop: i > 0 ? '10px' : 0, borderTop: i > 0 ? '1px solid #f2f4f6' : 'none', marginBottom: i < anomalies.length - 1 ? '10px' : 0 }}>
-                      <div style={{ fontSize: '11px', fontWeight: 700, color: '#ba1a1a' }}>{a.vital || a.type || 'Anomaly'}</div>
-                      <div style={{ fontSize: '12px', color: '#5a5e6b', marginTop: '2px' }}>{a.description || a.value || JSON.stringify(a)}</div>
-                    </div>
-                  ))
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {[
-                      { label: 'RESTING HR', value: '114 BPM', color: '#ba1a1a', note: 'Tachycardia detected' },
-                      { label: 'BODY TEMP', value: '38.9°C', color: '#ba1a1a', note: 'Rising rapidly' },
-                      { label: 'BLOOD PRESSURE', value: '138/92', color: '#9b6000', note: 'Stage 1 Hypertension' },
-                    ].map((v, i) => (
-                      <div key={v.label} style={{ paddingTop: i > 0 ? '10px' : 0, borderTop: i > 0 ? '1px solid #f2f4f6' : 'none' }}>
-                        <div style={{ fontSize: '9px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#9ca3af', marginBottom: '3px' }}>{v.label}</div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                          <div style={{ fontFamily: 'Manrope,sans-serif', fontWeight: 800, fontSize: '18px', color: v.color }}>{v.value}</div>
-                          <div style={{ fontSize: '11px', color: v.color, fontWeight: 600, textAlign: 'right' }}>{v.note}</div>
-                        </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {[
+                    { label: 'RESTING HR', value: '114 BPM', color: '#ba1a1a', note: 'Tachycardia detected' },
+                    { label: 'BODY TEMP', value: '38.9°C', color: '#ba1a1a', note: 'Rising rapidly' },
+                    { label: 'BLOOD PRESSURE', value: '138/92', color: '#9b6000', note: 'Stage 1 Hypertension' },
+                  ].map((v, i) => (
+                    <div key={v.label} style={{ paddingTop: i > 0 ? '10px' : 0, borderTop: i > 0 ? '1px solid #f2f4f6' : 'none' }}>
+                      <div style={{ fontSize: '9px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#9ca3af', marginBottom: '3px' }}>{v.label}</div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div style={{ fontFamily: 'Manrope,sans-serif', fontWeight: 800, fontSize: '18px', color: v.color }}>{v.value}</div>
+                        <div style={{ fontSize: '11px', color: v.color, fontWeight: 600 }}>{v.note}</div>
                       </div>
-                    ))}
-                  </div>
-                )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Differential Diagnosis */}
@@ -213,8 +160,8 @@ export default function PatientBriefing() {
                 {diagnoses.length > 0 ? (
                   diagnoses.slice(0, 3).map((d, i) => {
                     const name = d.condition || d.diagnosis || d.name || 'Unknown';
-                    const conf = d.confidence || d.probability || (85 - i * 20);
-                    const pct = typeof conf === 'string' ? parseInt(conf) : Math.round(conf * (conf > 1 ? 1 : 100));
+                    const conf = d.confidence || 0;
+                    const pct = typeof conf === 'number' ? (conf > 1 ? conf : Math.round(conf * 100)) : parseInt(conf) || 0;
                     return (
                       <div key={i} style={{ marginBottom: '12px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
@@ -254,8 +201,8 @@ export default function PatientBriefing() {
                     <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px', background: '#ffdad6', borderRadius: '8px', marginBottom: i < drugWarnings.length - 1 ? '8px' : 0 }}>
                       <span className="material-icons-round" style={{ fontSize: '18px', color: '#ba1a1a', flexShrink: 0 }}>dangerous</span>
                       <div>
-                        <div style={{ fontSize: '12px', fontWeight: 700, color: '#ba1a1a' }}>{w.interaction || w.drugs || w.warning || 'Drug Interaction Detected'}</div>
-                        <div style={{ fontSize: '11px', color: '#5a5e6b', marginTop: '2px' }}>{w.severity || w.description || 'Review required'}</div>
+                        <div style={{ fontSize: '12px', fontWeight: 700, color: '#ba1a1a' }}>{w.drug_a} × {w.drug_b}</div>
+                        <div style={{ fontSize: '11px', color: '#5a5e6b', marginTop: '2px' }}>{w.severity} — {w.recommendation}</div>
                       </div>
                     </div>
                   ))
@@ -277,14 +224,13 @@ export default function PatientBriefing() {
                   <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#5a5e6b' }}>Dynamic Risk Scores</span>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                  {Object.entries(riskScores).length > 0 ? (
-                    Object.entries(riskScores).slice(0, 2).map(([key, val]) => {
-                      const pct = typeof val === 'number' ? Math.round(val * (val > 1 ? 1 : 100)) : parseInt(val) || 0;
-                      const isHigh = pct > 60;
+                  {Array.isArray(riskScores) && riskScores.length > 0 ? (
+                    riskScores.slice(0, 2).map((r, i) => {
+                      const isHigh = r.score > 60;
                       return (
-                        <div key={key} style={{ background: isHigh ? '#ffdad6' : '#f2f4f6', borderRadius: '8px', padding: '14px', textAlign: 'center' }}>
-                          <div style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: isHigh ? '#ba1a1a' : '#9ca3af', marginBottom: '6px' }}>{key.replace(/_/g, ' ')}</div>
-                          <div style={{ fontFamily: 'Manrope,sans-serif', fontWeight: 800, fontSize: '28px', color: isHigh ? '#ba1a1a' : '#191c1e' }}>{pct}<span style={{ fontSize: '14px' }}>%</span></div>
+                        <div key={i} style={{ background: isHigh ? '#ffdad6' : '#f2f4f6', borderRadius: '8px', padding: '14px', textAlign: 'center' }}>
+                          <div style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: isHigh ? '#ba1a1a' : '#9ca3af', marginBottom: '6px' }}>{r.condition?.slice(0, 20)}</div>
+                          <div style={{ fontFamily: 'Manrope,sans-serif', fontWeight: 800, fontSize: '28px', color: isHigh ? '#ba1a1a' : '#191c1e' }}>{r.score}<span style={{ fontSize: '14px' }}>%</span></div>
                         </div>
                       );
                     })
@@ -304,17 +250,14 @@ export default function PatientBriefing() {
               </div>
             </div>
 
-            {/* SOAP Note Preview */}
+            {/* SOAP Preview */}
             {soapNote && Object.keys(soapNote).length > 0 && (
               <div style={{ background: '#fff', borderRadius: '12px', padding: '16px', marginTop: '14px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                   <div style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#5a5e6b', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span className="material-icons-round" style={{ fontSize: '16px', color: '#003178' }}>history_edu</span>
-                    SOAP Note Preview
+                    <span className="material-icons-round" style={{ fontSize: '16px', color: '#003178' }}>history_edu</span>SOAP Note Preview
                   </div>
-                  <button onClick={() => navigate('/soap')} style={{ padding: '6px 14px', background: '#003178', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
-                    Open Full Editor →
-                  </button>
+                  <button onClick={() => navigate('/soap')} style={{ padding: '6px 14px', background: '#003178', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>Open Full Editor →</button>
                 </div>
                 {['subjective', 'objective', 'assessment', 'plan'].map((key) => (
                   soapNote[key] && (
@@ -330,8 +273,8 @@ export default function PatientBriefing() {
             )}
           </div>
 
-          {/* AI AGENT LOG */}
-          <div style={{ background: 'linear-gradient(160deg,#001d4a,#003178,#0d47a1)', padding: '20px 16px', minHeight: 'calc(100vh - 56px)' }}>
+          {/* AI Agent Log */}
+          <div style={{ background: 'linear-gradient(160deg,#001d4a,#003178,#0d47a1)', padding: '20px 16px' }}>
             <div style={{ fontFamily: 'Manrope,sans-serif', fontWeight: 800, fontSize: '14px', color: '#fff', marginBottom: '4px' }}>🤖 AI Agent Log</div>
             <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginBottom: '16px' }}>9 Agents Active · Real-time Monitoring</div>
             {AGENTS.map((agent, i) => (
