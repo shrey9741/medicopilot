@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import API from '../api/client';
 import Sidebar from '../components/Sidebar';
@@ -19,6 +19,7 @@ export default function PatientBriefing() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [voicePlaying, setVoicePlaying] = useState(false);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const fetchBriefing = async () => {
@@ -33,7 +34,33 @@ export default function PatientBriefing() {
       }
     };
     fetchBriefing();
+    return () => window.speechSynthesis.cancel();
   }, [id]);
+
+  const handleVoice = () => {
+    if (voicePlaying) {
+      window.speechSynthesis.cancel();
+      setVoicePlaying(false);
+      return;
+    }
+    const text = summary
+      ? `Pre-visit briefing for ${patientName}. ${summary}`
+      : `Pre-visit briefing for ${patientName}. ${
+          diagnoses[0] ? `Primary diagnosis: ${diagnoses[0].condition} with ${diagnoses[0].confidence} percent confidence.` : ''
+        } ${
+          drugWarnings.length > 0 ? `Warning: ${drugWarnings.length} drug interactions flagged.` : 'No drug interactions detected.'
+        } SOAP note is ready for your review.`;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+    utterance.onend = () => setVoicePlaying(false);
+    utterance.onerror = () => setVoicePlaying(false);
+    audioRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+    setVoicePlaying(true);
+  };
 
   if (loading) return (
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Inter,sans-serif', background: '#f8f9fb' }}>
@@ -51,7 +78,7 @@ export default function PatientBriefing() {
   const summary = briefing?.summary || '';
   const diagnoses = briefing?.diagnoses || [];
   const drugWarnings = briefing?.drug_warnings || [];
-  const riskScores = briefing?.risk_scores || {};
+  const riskScores = briefing?.risk_scores || [];
   const soapNote = briefing?.soap_note || {};
   const anomalies = briefing?.anomalies || briefing?.vital_anomalies || [];
 
@@ -80,6 +107,7 @@ export default function PatientBriefing() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 260px', minHeight: 'calc(100vh - 56px)' }}>
           <div style={{ padding: '20px 20px 20px 24px' }}>
 
+            {/* Error banner */}
             {error && (
               <div style={{ background: '#ffecd3', border: '1px solid #f97316', color: '#9b6000', padding: '10px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: 600, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span className="material-icons-round" style={{ fontSize: '16px' }}>warning</span>{error}
@@ -107,7 +135,10 @@ export default function PatientBriefing() {
                   </div>
                 ))}
               </div>
-              <button onClick={() => setVoicePlaying(!voicePlaying)} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: voicePlaying ? '#003178' : 'rgba(0,49,120,0.08)', border: 'none', borderRadius: '20px', color: voicePlaying ? '#fff' : '#003178', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
+              <button
+                onClick={handleVoice}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: voicePlaying ? '#003178' : 'rgba(0,49,120,0.08)', border: 'none', borderRadius: '20px', color: voicePlaying ? '#fff' : '#003178', fontSize: '12px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
+              >
                 <span className="material-icons-round" style={{ fontSize: '16px' }}>{voicePlaying ? 'pause' : 'volume_up'}</span>
                 {voicePlaying ? 'Pause Briefing' : 'Play Voice Briefing'}
               </button>
