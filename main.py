@@ -71,6 +71,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://localhost:3000",
+        "https://medicopilotproj.netlify.app",
+        "https://69eeed6d45d11409e906b82a--medicopilotproj.netlify.app",
         os.getenv("FRONTEND_URL", ""),
     ],
     allow_credentials=True,
