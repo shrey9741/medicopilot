@@ -1,6 +1,6 @@
 # 🏥 MediCopilot — AI Clinical Copilot
 
-> A2A-powered pre-visit patient briefing system — Production-Grade Edition v2.0.0
+> Production-Grade A2A Medical AI — Pre-visit patient briefing in under 5 seconds.
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue?style=flat&logo=python)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com)
@@ -9,17 +9,18 @@
 [![JWT](https://img.shields.io/badge/Auth-JWT-black?style=flat&logo=jsonwebtokens)](https://jwt.io)
 [![FHIR](https://img.shields.io/badge/FHIR-R4-red?style=flat)](https://hapi.fhir.org)
 [![Backend](https://img.shields.io/badge/Backend-Render-46E3B7?style=flat&logo=render)](https://medicopilot.onrender.com/health)
+[![Frontend](https://img.shields.io/badge/Frontend-Netlify-00C7B7?style=flat&logo=netlify)](https://medicopilotproj.netlify.app)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat)](LICENSE)
 
 ---
 
 ## 📌 The Problem
 
-Doctors waste 8–15 minutes per patient reviewing scattered chart data before each visit — conditions, medications, recent labs, vitals, interaction risks. This time pressure leads to missed findings and rushed decisions.
+Doctors waste **8–15 minutes per patient** reviewing scattered chart data before each visit. This time pressure leads to missed findings and rushed decisions.
 
 ## 💡 The Solution
 
-MediCopilot is an intelligent A2A-powered clinical copilot that generates a structured 60-second pre-visit briefing. It reads real FHIR R4 patient data, runs it through 9 specialized AI agents, and delivers a complete report — differential diagnosis, drug safety alerts, risk scores, and a ready-to-file SOAP note — all behind JWT-protected endpoints with full request tracing.
+MediCopilot orchestrates **9 specialized AI agents** that process real FHIR R4 patient data and deliver a complete clinical briefing in under 5 seconds — differential diagnosis, drug safety alerts, risk scores, voice briefing, and a ready-to-file SOAP note — all behind JWT-protected endpoints.
 
 ---
 
@@ -27,26 +28,12 @@ MediCopilot is an intelligent A2A-powered clinical copilot that generates a stru
 
 | Service | URL | Status |
 |---------|-----|--------|
-| 🖥️ Frontend (React) | — | Week 2 — Coming Soon |
-| ⚙️ Backend API (Render) | https://medicopilot.onrender.com | ✅ Live |
-| 📋 API Docs (Swagger) | https://medicopilot.onrender.com/docs | ✅ Live |
-| ❤️ Health Check | https://medicopilot.onrender.com/health | ✅ Live |
-| 🔐 Login Endpoint | https://medicopilot.onrender.com/auth/login | ✅ Live |
+| 🖥️ Frontend (React) | [medicopilotproj.netlify.app](https://medicopilotproj.netlify.app) | ✅ Live |
+| ⚙️ Backend API | [medicopilot.onrender.com](https://medicopilot.onrender.com) | ✅ Live |
+| 📋 Swagger Docs | [medicopilot.onrender.com/docs](https://medicopilot.onrender.com/docs) | ✅ Live |
+| ❤️ Health Check | [medicopilot.onrender.com/health](https://medicopilot.onrender.com/health) | ✅ Live |
 
----
-
-## 🆕 What's New in v2.0.0
-
-| Feature | Details |
-|---------|---------|
-| **JWT Authentication** | Doctor login/logout with 8-hour tokens — `/auth/login`, `/auth/me`, `/auth/logout` |
-| **HAPI FHIR Integration** | Real patient data from public R4 sandbox — automatic mock fallback |
-| **Structured Logging** | Every request gets a unique trace ID — JSON logs in production |
-| **Protected Endpoints** | `/invoke` and `/patients` now require a valid Bearer token |
-| **React Frontend** | 4-page Clinical Sentinel UI — Dashboard, Briefing, SOAP, Agents (Week 2) |
-| **Voice Briefings** | Hands-free pre-visit audio via gTTS — doctor listens while walking in (Phase 2) |
-| **RAGAS Evaluation** | RAG faithfulness scores visible in UI — `/metrics` endpoint (Phase 3) |
-| **CORS Ready** | Configured for React dev server and production frontend URL |
+**Demo login:** `dr.thorne` / `demo123`
 
 ---
 
@@ -54,52 +41,16 @@ MediCopilot is an intelligent A2A-powered clinical copilot that generates a stru
 
 | Feature | Description |
 |---------|-------------|
-| **Vital Anomaly Detection** | Rule-based pre-LLM check — flags URGENT/CRITICAL vitals instantly |
-| **Temporal Patient Memory** | Tracks glucose, BP, HR trends across visits — detects worsening patterns |
-| **RAG Medical Knowledge** | FAISS vectorstore with WHO/ADA/ACC/JNC guidelines — cited in every output |
-| **Differential Diagnosis** | Ranked DDx with confidence scores, clinical reasoning, and explainability |
-| **Drug Interaction Matrix** | Checks all medications for interactions, contraindications, and allergy conflicts |
-| **Risk Scoring** | Cardiovascular and condition-specific risk percentages with contributing factors |
-| **Second Opinion Mode** | A separate agent challenges the primary diagnosis — devil's advocate reasoning |
-| **SOAP Note Generator** | Synthesizes all agent outputs into structured S/O/A/P clinical documentation |
-| **Agent Reasoning Trace** | Full audit trail showing which agent did what and why |
-| **Voice Briefings** | Text-to-speech pre-visit audio — hands-free clinical workflow (Phase 2) |
-
----
-
-## 🏗️ Architecture
-
-```
-Clinician / EHR Session
-          ↓
-  JWT Authentication Layer
-          ↓
-  MediCopilot Orchestrator Agent
-    ↙         ↓          ↘
-DiagnosisAgent  DrugSafetyAgent  RiskScoringAgent
-    ↘         ↓          ↙
-HAPI FHIR Layer  +  RAG Knowledge Layer
-    ↘         ↓          ↙
-      LLM Reasoning Layer
-      (Groq · Llama 3.1-8b)
-          ↓
-   Structured Clinical Briefing
-(DDx · Drug Safety · Risk · SOAP · Trace)
-```
-
-### Tech Stack
-
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **LLM** | Groq API — `llama-3.1-8b-instant` | Fast inference for all 9 agents |
-| **RAG** | LangChain + FAISS + TF-IDF | Medical guideline retrieval |
-| **Backend** | FastAPI + Uvicorn | REST API + A2A endpoints |
-| **Auth** | python-jose + passlib + bcrypt | JWT doctor authentication |
-| **FHIR** | HAPI FHIR R4 public sandbox | Real patient data with mock fallback |
-| **Logging** | structlog | Structured JSON logs with request tracing |
-| **Frontend** | React + Vite + Tailwind | 4-page Clinical Sentinel UI (Week 2) |
-| **Backend Deploy** | Render (free tier) | Auto-deploy from GitHub |
-| **Frontend Deploy** | Netlify / Vercel | Static React build (Week 2) |
+| **JWT Authentication** | Doctor login with 8-hour session tokens |
+| **HAPI FHIR R4** | Real patient data from public sandbox + mock fallback |
+| **9 AI Agents** | Specialized agents for diagnosis, drug safety, risk scoring |
+| **Voice Briefings** | Browser TTS reads the AI briefing aloud — hands-free |
+| **Structured Logging** | Every request has a unique trace ID — JSON logs in production |
+| **SOAP Notes** | Auto-generated S/O/A/P clinical documentation |
+| **RAG Pipeline** | FAISS vectorstore with WHO/ADA/ACC/JNC medical guidelines |
+| **React Frontend** | 4-page Clinical Sentinel UI — dark sidebar, live FHIR data |
+| **Second Opinion** | A separate agent challenges the primary diagnosis |
+| **Anomaly Detection** | Rule-based pre-LLM vital sign checks |
 
 ---
 
@@ -107,15 +58,47 @@ HAPI FHIR Layer  +  RAG Knowledge Layer
 
 | Agent | Role |
 |-------|------|
-| **FHIRAgent** | Fetches patient bundle from HAPI FHIR R4 sandbox (real data) |
+| **FHIRAgent** | Fetches patient bundle from HAPI FHIR R4 sandbox |
 | **MemoryAgent** | Analyzes visit history for clinical trends |
-| **AnomalyDetector** | Rule-based vital sign anomaly detection (runs before LLM) |
-| **RAGAgent** | Retrieves relevant medical guidelines from FAISS vectorstore |
+| **AnomalyDetector** | Rule-based vital sign anomaly detection (pre-LLM) |
+| **RAGAgent** | Retrieves relevant medical guidelines from FAISS |
 | **DiagnosisAgent** | Generates differential diagnosis with confidence scores |
 | **DrugSafetyAgent** | Checks medication interactions and contraindications |
-| **RiskScoringAgent** | Calculates risk percentages using Framingham/ACC guidelines |
+| **RiskScoringAgent** | Calculates risk % using Framingham/ACC guidelines |
 | **SecondOpinionAgent** | Challenges primary diagnosis for balanced assessment |
 | **SOAPNoteGenerator** | Synthesizes all outputs into clinical documentation |
+
+---
+
+## 🏗️ Architecture
+
+```
+Clinician Login (JWT)
+        ↓
+MediCopilot Orchestrator
+   ↙      ↓       ↘
+FHIR   RAG KB   Memory
+   ↘      ↓       ↙
+  9 Specialized AI Agents
+  (Groq · Llama 3.1-8b-instant)
+        ↓
+  Structured Clinical Briefing
+  DDx · Drug Safety · Risk · SOAP · Voice
+```
+
+### Tech Stack
+
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| **LLM** | Groq — `llama-3.1-8b-instant` | Fast inference for all 9 agents |
+| **RAG** | LangChain + FAISS + TF-IDF | Medical guideline retrieval |
+| **Backend** | FastAPI + Uvicorn | REST API + A2A endpoints |
+| **Auth** | python-jose + passlib + bcrypt | JWT doctor authentication |
+| **FHIR** | HAPI FHIR R4 public sandbox | Real patient data |
+| **Logging** | structlog | JSON logs with trace IDs |
+| **Frontend** | React + Vite + Tailwind | 4-page Clinical Sentinel UI |
+| **Backend Deploy** | Render | Auto-deploy from GitHub |
+| **Frontend Deploy** | Netlify | Auto-deploy from GitHub |
 
 ---
 
@@ -123,178 +106,126 @@ HAPI FHIR Layer  +  RAG Knowledge Layer
 
 ```
 medicopilot/
-├── main.py                      # FastAPI app v2.0 — JWT protected endpoints
-├── logging_config.py            # Structlog configuration
-├── middleware.py                # Request tracing middleware
+├── main.py                  # FastAPI v2.0 — JWT protected endpoints
+├── logging_config.py        # Structlog configuration
+├── middleware.py            # Request tracing middleware
 ├── requirements.txt
-├── render.yaml                  # Render deployment config
+├── render.yaml              # Render deployment config
 ├── Procfile
-├── auth/
-│   ├── __init__.py
-│   ├── jwt_handler.py           # Token creation and verification
-│   ├── middleware.py            # FastAPI JWT dependency
-│   ├── models.py                # LoginRequest, TokenResponse schemas
-│   └── registry.py             # Doctor credentials store
+├── auth/                    # JWT auth — login, tokens, registry
+│   ├── jwt_handler.py
+│   ├── middleware.py
+│   ├── models.py
+│   └── registry.py
 ├── routes/
-│   ├── __init__.py
-│   └── auth_router.py          # /auth/login, /auth/me, /auth/logout
-├── frontend/                    # React app — Week 2
-│   └── src/pages/              # Dashboard, Briefing, SOAP, Agents
-├── models/
-│   └── schemas.py              # Pydantic data models
+│   └── auth_router.py       # /auth/login, /auth/me, /auth/logout
 ├── fhir/
-│   ├── hapi_client.py          # HAPI FHIR R4 client + mock fallback
-│   └── mock_client.py          # 13 demo patients — fallback data
+│   ├── hapi_client.py       # HAPI FHIR R4 client + mock fallback
+│   └── mock_client.py       # 13 demo patients
 ├── rag/
-│   └── retriever.py            # FAISS vectorstore + TF-IDF embeddings
-└── agents/
-    ├── orchestrator.py         # Main pipeline — coordinates all 9 agents
-    ├── anomaly_detector.py
-    ├── memory.py
-    ├── diagnosis_agent.py
-    ├── drug_agent.py
-    ├── risk_agent.py
-    ├── second_opinion_agent.py
-    └── soap_generator.py
+│   └── retriever.py         # FAISS vectorstore
+├── agents/
+│   ├── orchestrator.py      # Main pipeline — 9 agents
+│   ├── anomaly_detector.py
+│   ├── diagnosis_agent.py
+│   ├── drug_agent.py
+│   ├── risk_agent.py
+│   ├── second_opinion_agent.py
+│   └── soap_generator.py
+├── models/
+│   └── schemas.py           # Pydantic schemas
+└── frontend/                # React app
+    └── src/
+        ├── components/      # Shared Sidebar component
+        ├── pages/           # Dashboard, Briefing, SOAP, Agents
+        ├── api/             # Axios client + JWT interceptors
+        └── store/           # Zustand auth store
 ```
 
 ---
 
 ## 🚀 Local Setup
 
-### Prerequisites
-
-- Python 3.11+
-- Node.js 18+ (for React frontend)
-- Groq API key — free at [console.groq.com](https://console.groq.com)
-
-### Installation
-
 ```bash
-# 1. Clone the repository
+# Clone
 git clone https://github.com/shrey9741/medicopilot.git
 cd medicopilot
 
-# 2. Create virtual environment
+# Backend
 python -m venv venv
-
-# Windows
-venv\Scripts\activate
-
-# Mac/Linux
-source venv/bin/activate
-
-# 3. Install dependencies
+venv\Scripts\activate        # Windows
 pip install -r requirements.txt
 
-# 4. Set up environment variables
+# Environment
 cp .env.example .env
-# Edit .env and fill in your keys
+# Fill in GROQ_API_KEY and JWT_SECRET_KEY
+
+# Run backend
+uvicorn main:app --reload --port 8000
+
+# Frontend (new terminal)
+cd frontend
+npm install
+npm run dev
 ```
 
 ### Environment Variables
 
 ```env
 GROQ_API_KEY=gsk_your_key_here
-JWT_SECRET_KEY=your_32_char_secret_here
+JWT_SECRET_KEY=your_32_char_secret
 ENV=dev
 FHIR_USE_MOCK=false
 ```
 
-Generate your JWT secret:
+Generate JWT secret:
 ```bash
 python -c "import secrets; print(secrets.token_hex(32))"
 ```
-
-### Run the Backend
-
-```bash
-uvicorn main:app --reload --port 8000
-```
-
-| URL | Expected Response |
-|-----|------------------|
-| http://localhost:8000/health | `{"status": "ok", "version": "2.0.0"}` |
-| http://localhost:8000/docs | Swagger UI with all endpoints |
-| http://localhost:8000/auth/login | POST — returns JWT token |
-| http://localhost:8000/patients | GET — requires Bearer token |
 
 ---
 
 ## 🔌 API Reference
 
-### POST /auth/login
-
-Doctor login. Returns a JWT valid for 8 hours (one shift).
-
+### `POST /auth/login`
 ```json
-{
-  "username": "dr.thorne",
-  "password": "demo123"
-}
+{ "username": "dr.thorne", "password": "demo123" }
 ```
+Returns a JWT valid for 8 hours (one shift).
 
-Response:
+### `POST /invoke` 🔒
 ```json
-{
-  "access_token": "eyJ...",
-  "token_type": "bearer",
-  "doctor_name": "Dr. Julian Thorne",
-  "role": "Chief Medical Officer"
-}
+{ "patient_id": "P001", "sharp_token": null }
 ```
+Runs 9 agents and returns a full clinical briefing.
 
-### POST /invoke 🔒
-
-Main briefing endpoint. Requires `Authorization: Bearer <token>`.
-
-```json
-{
-  "patient_id": "P001",
-  "sharp_token": "optional"
-}
-```
-
-### GET /patients 🔒
-
+### `GET /patients` 🔒
 Returns patient list from HAPI FHIR sandbox (or mock fallback).
 
-### GET /auth/me 🔒
-
-Returns the currently authenticated doctor's info from the JWT.
-
-### GET /health
-
+### `GET /health`
 ```json
-{
-  "status": "ok",
-  "version": "2.0.0",
-  "rag_loaded": true,
-  "model": "llama-3.1-8b-instant"
-}
+{ "status": "ok", "version": "2.0.0", "rag_loaded": true }
 ```
 
 ---
 
 ## 👥 Demo Patients
 
-13 mock patients across 5 clinical categories:
-
 | ID | Name | Conditions |
 |----|------|-----------|
 | P001 | John Doe, 62M | Type 2 Diabetes, Hypertension, CKD Stage 2 |
-| P002 | Sarah Chen, 45F | Atrial Fibrillation, Hypothyroidism, Obesity |
-| P003 | Marcus Johnson, 71M | COPD, Heart Failure (EF 35%), T2 Diabetes |
-| P004 | Patricia Williams, 54F | Stage III Breast Cancer (HER2+), Anemia |
-| P005 | Robert Nguyen, 67M | Stage IV Lung Cancer, COPD, Cachexia |
+| P002 | Sarah Chen, 45F | Atrial Fibrillation, Hypothyroidism |
+| P003 | Marcus Johnson, 71M | COPD, Heart Failure (EF 35%) |
+| P004 | Patricia Williams, 54F | Stage III Breast Cancer (HER2+) |
+| P005 | Robert Nguyen, 67M | Stage IV Lung Cancer, COPD |
 | P006 | Aiden Patel, 8M | Type 1 Diabetes, Asthma, ADHD |
-| P007 | Lily Thompson, 5F | ALL Leukemia (Maintenance), Immunosuppression |
-| P008 | Diana Foster, 34F | Bipolar I, Generalized Anxiety, Hypothyroidism |
-| P009 | Carlos Rivera, 28M | Schizophrenia, Substance Use, Metabolic Syndrome |
-| P010 | Eleanor Voss, 41F | SLE, Lupus Nephritis, Antiphospholipid Syndrome |
+| P007 | Lily Thompson, 5F | ALL Leukemia, Immunosuppression |
+| P008 | Diana Foster, 34F | Bipolar I, Generalized Anxiety |
+| P009 | Carlos Rivera, 28M | Schizophrenia, Substance Use |
+| P010 | Eleanor Voss, 41F | SLE, Lupus Nephritis |
 | P011 | Samuel Okafor, 19M | Cystic Fibrosis, CF-related Diabetes |
-| P012 | Ingrid Larsson, 37F | Multiple Sclerosis (RRMS), Major Depression |
-| P013 | Theo Blackwood, 52M | ALS, Respiratory Insufficiency, Dysphagia |
+| P012 | Ingrid Larsson, 37F | Multiple Sclerosis (RRMS) |
+| P013 | Theo Blackwood, 52M | ALS, Respiratory Insufficiency |
 
 ---
 
@@ -302,23 +233,22 @@ Returns the currently authenticated doctor's info from the JWT.
 
 ### Backend → Render
 
-Render auto-deploys from GitHub on every push. Add these environment variables in the Render dashboard:
-
 | Variable | Value |
 |----------|-------|
-| `GROQ_API_KEY` | your Groq API key |
+| `GROQ_API_KEY` | your Groq key |
 | `JWT_SECRET_KEY` | 32-char random secret |
 | `ENV` | `production` |
 | `FHIR_USE_MOCK` | `false` |
+| `FRONTEND_URL` | `https://medicopilotproj.netlify.app` |
 
-### Frontend → Netlify (Week 2)
+### Frontend → Netlify
 
-```bash
-cd frontend
-npm run build
-# Deploy /dist to Netlify
-# Set env: VITE_API_URL=https://medicopilot.onrender.com
-```
+| Setting | Value |
+|---------|-------|
+| Base directory | `frontend` |
+| Build command | `npm run build` |
+| Publish directory | `frontend/dist` |
+| `VITE_API_URL` | `https://medicopilot.onrender.com` |
 
 ---
 
@@ -327,30 +257,29 @@ npm run build
 | Phase | Status | Features |
 |-------|--------|---------|
 | Phase 1 — Week 1 | ✅ Complete | JWT auth, HAPI FHIR, structured logging |
-| Phase 1 — Week 2 | 🔄 In Progress | React frontend — 4 pages |
-| Phase 2 | 📋 Planned | Voice briefings with gTTS / ElevenLabs |
-| Phase 3 | 📋 Planned | RAGAS scores, `/metrics` endpoint, real performance numbers |
+| Phase 1 — Week 2 | ✅ Complete | React frontend, Netlify deployment |
+| Phase 2 | 🔄 Next | Full FHIR patient briefings, ElevenLabs voice |
+| Phase 3 | 📋 Planned | RAGAS scores, `/metrics` endpoint |
 
 ---
 
 ## 🔮 Future Scope
 
-- **Real EHR Integration** — Connect to Epic, Cerner, or any FHIR R4 compliant EHR
-- **Multi-hospital Support** — Multi-tenant architecture with SHARP token isolation
-- **Streaming Responses** — Real-time agent output streaming via WebSockets
-- **Voice Briefings** — Text-to-speech SOAP note delivery for hands-free use
-- **Specialist Mode** — Cardiology, Oncology, Pediatrics specialist agent prompts
-- **Outcome Tracking** — Compare AI predictions against actual diagnoses over time
-- **RAGAS Evaluation** — Faithfulness, relevancy, and precision scores in the UI
+- **Full FHIR Briefings** — Wire real FHIR patient data into all 9 agents
+- **Real EHR Integration** — Epic, Cerner, any FHIR R4 compliant system
+- **ElevenLabs Voice** — Premium TTS for production voice briefings
+- **Streaming Responses** — Real-time agent output via WebSockets
+- **RAGAS Evaluation** — Faithfulness scores visible in the UI
+- **Specialist Mode** — Cardiology, Oncology, Pediatrics agent tuning
+- **Outcome Tracking** — Compare AI predictions against actual diagnoses
 
 ---
 
 ## 👨‍💻 Author
 
 **Shrey Kumar**
-
 - GitHub: [@shrey9741](https://github.com/shrey9741)
-- Repository: [github.com/shrey9741/medicopilot](https://github.com/shrey9741/medicopilot)
+- Repo: [github.com/shrey9741/medicopilot](https://github.com/shrey9741/medicopilot)
 
 ---
 
@@ -360,4 +289,4 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-> Built for the Prompt Opinion Healthcare AI Hackathon · Powered by Groq · HAPI FHIR R4 · JWT Secured · A2A Compatible
+> Built for the Prompt Opinion Healthcare AI Hackathon · Powered by Groq · HAPI FHIR R4 · JWT Secured · React + Netlify · A2A Compatible
