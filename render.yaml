@@ -2,7 +2,6 @@
   - type: web
     name: medicopilot
     runtime: python
-    rootDir: medicopilot
     buildCommand: pip install -r requirements.txt && python -c "from rag.retriever import build_vectorstore; build_vectorstore()"
     startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
     envVars:
