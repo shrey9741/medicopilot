@@ -39,6 +39,7 @@ with col_btn:
 # ── Patient strip ──
 
 
+
 p  = PATIENTS[patient_id]
 sc = {"critical":"#ef4444","urgent":"#f59e0b","normal":"#10b981"}[p["status"]]
 st.markdown(f"""
