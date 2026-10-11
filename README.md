@@ -1,381 +1,253 @@
-# 🏥 MediCopilot — AI Clinical Copilot
+# MediCopilot — Multi-Agent Clinical Briefing System
 
-> Production-Grade A2A Medical AI — Pre-visit patient briefing in under 5 seconds.
+A full-stack AI prototype that combines specialized agents, retrieval-augmented generation (RAG), and structured clinical workflows to produce an organized patient briefing.
 
-[![Python](https://img.shields.io/badge/Python-3.11+-blue?style=flat&logo=python)](https://python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com)
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react)](https://react.dev)
-[![Groq](https://img.shields.io/badge/Groq-LLaMA_3.1-orange?style=flat)](https://groq.com)
-[![JWT](https://img.shields.io/badge/Auth-JWT-black?style=flat&logo=jsonwebtokens)](https://jwt.io)
-[![FHIR](https://img.shields.io/badge/FHIR-R4-red?style=flat)](https://hapi.fhir.org)
-[![Backend](https://img.shields.io/badge/Backend-Render-46E3B7?style=flat&logo=render)](https://medicopilot.onrender.com/health)
-[![Frontend](https://img.shields.io/badge/Frontend-Netlify-00C7B7?style=flat&logo=netlify)](https://medicopilotproj.netlify.app)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=flat)](LICENSE)
+> **Important:** This is an educational software prototype, not a medical device or a substitute for professional clinical judgment. AI-generated outputs may be incomplete or incorrect. Do not use it to make real patient-care decisions.
 
----
+## Overview
 
-## 📌 The Problem
+Reviewing patient information across records can be time-consuming. MediCopilot explores how an AI-assisted workflow can organize patient context, retrieve relevant medical guidance, and draft a structured clinical summary for review.
 
-Doctors waste **8–15 minutes per patient** reviewing scattered chart data before each visit. This time pressure leads to missed findings and rushed decisions.
+The application includes a React frontend and FastAPI backend. Its workflow uses specialized agents for tasks such as retrieval, differential-diagnosis drafting, medication-safety checks, risk scoring, second-opinion review, and SOAP-note generation.
 
-## 💡 The Solution
+## Key Features
 
-MediCopilot orchestrates **9 specialized AI agents** that process real FHIR R4 patient data and deliver a complete clinical briefing in under 5 seconds — differential diagnosis, drug safety alerts, risk scores, voice briefing, and a ready-to-file SOAP note — all behind JWT-protected endpoints.
+- **Multi-agent workflow:** separates the briefing process into specialized tasks.
+- **RAG over medical guidance:** FAISS-based retrieval for a local collection of medical guidelines.
+- **FHIR integration:** includes a client for the public HAPI FHIR R4 sandbox, with a mock-data fallback.
+- **Structured clinical output:** organizes generated information into briefing sections and SOAP notes.
+- **Second-opinion step:** includes a separate agent intended to challenge the primary generated assessment.
+- **Rule-based anomaly checks:** checks selected vital-sign values before LLM processing.
+- **API authentication:** JWT-based authentication for protected endpoints.
+- **Request observability:** structured JSON logging and request trace identifiers.
+- **Web interface:** React UI for patient browsing, briefings, SOAP notes, and agent workflow traces.
+- **Voice playback:** browser text-to-speech for reading the generated briefing aloud.
 
----
+## Architecture
 
-## 🌐 Live Links
-
-| Service | URL | Status |
-|---------|-----|--------|
-| 🖥️ Frontend (React) | [medicopilotproj.netlify.app](https://medicopilotproj.netlify.app) | ✅ Live |
-| ⚙️ Backend API | [medicopilot.onrender.com](https://medicopilot.onrender.com) | ✅ Live |
-| 📋 Swagger Docs | [medicopilot.onrender.com/docs](https://medicopilot.onrender.com/docs) | ✅ Live |
-| ❤️ Health Check | [medicopilot.onrender.com/health](https://medicopilot.onrender.com/health) | ✅ Live |
-
-**Demo login:** `dr.thorne` / `demo123`
-
----
-
-## 📋 Version History
-
-### v1.0.0 — Hackathon MVP
-> The original submission — a working AI clinical copilot built in days.
-
-**What was built:**
-- Streamlit frontend — "Clinical Luminary" dark UI
-- FastAPI backend with A2A `/invoke` endpoint
-- 9 specialized AI agents orchestrated in sequence
-- Mock FHIR R4 patient data (13 patients across 4 categories)
-- FAISS vectorstore with WHO/ADA/ACC/JNC medical guidelines
-- Differential diagnosis with confidence scores
-- Drug interaction matrix
-- Risk scoring (Framingham/ACC)
-- Second opinion agent
-- SOAP note generator
-- Agent reasoning trace
-- Deployed on Render (backend) + Streamlit Cloud (frontend)
-
-**Tech Stack:** Python · FastAPI · Streamlit · Groq · LangChain · FAISS
-
----
-
-### v2.0.0 — Production-Grade Edition ✅ Current
-> A complete architectural upgrade — from hackathon demo to production-ready system.
-
-**What changed:**
-
-| Area | v1.0 | v2.0 |
-|------|------|------|
-| **Auth** | None — open endpoints | JWT authentication (8-hour tokens) |
-| **Frontend** | Streamlit | React + Vite + Tailwind — 4-page Clinical Sentinel UI |
-| **FHIR** | 13 hardcoded mock patients | HAPI FHIR R4 public sandbox (real data) + mock fallback |
-| **Logging** | print() statements | structlog — JSON logs with unique trace IDs per request |
-| **Security** | CORS open (`*`) | CORS locked to specific origins |
-| **Deployment** | Streamlit Cloud | Netlify (frontend) + Render (backend) |
-| **Voice** | None | Browser TTS — reads AI briefing aloud |
-| **Endpoints** | Public | JWT-protected `/invoke` and `/patients` |
-
-**New pages in React:**
-- `/dashboard` — Live patient list from HAPI FHIR sandbox
-- `/patient/:id` — Full clinical briefing with AI agent log
-- `/soap` — Interactive SOAP note editor
-- `/agents` — Agent orchestration trace visualizer
-
-**New backend modules:**
-- `auth/` — JWT handler, middleware, doctor registry
-- `routes/auth_router.py` — `/auth/login`, `/auth/me`, `/auth/logout`
-- `fhir/hapi_client.py` — Real FHIR R4 client with mock fallback
-- `logging_config.py` — Structlog configuration
-- `middleware.py` — Request tracing middleware
-
----
-
-### v3.0.0 — The Intelligence Layer 🔭 Planned
-> Making MediCopilot genuinely smarter and more production-hardened.
-
-**3 features planned:**
-
-#### 1. 🎙️ ElevenLabs Voice Briefings
-Replace browser TTS with ElevenLabs premium voice synthesis.
-- Doctor clicks a patient → AI generates briefing → plays as natural speech
-- "Hands-free pre-visit briefing" — doctor listens while walking to the room
-- Multiple voice options (male/female, accent, speed)
-- Falls back to browser TTS if API key not set
-
-```python
-# Planned endpoint
-POST /voice/briefing/{patient_id}
-→ Returns MP3 stream of the clinical briefing
+```text
+Clinician / Demo User
+        |
+        v
+React Frontend
+        |
+        v
+FastAPI Backend
+  |      |       |
+  |      |       +--> JWT Authentication
+  |      +----------> FHIR Client
+  |                     |--> HAPI FHIR R4 sandbox
+  |                     +--> Mock-data fallback
+  |
+  +--> Orchestrator
+          |
+          +--> Patient-history / memory analysis
+          +--> Rule-based anomaly checks
+          +--> FAISS guideline retrieval
+          +--> Differential-diagnosis drafting
+          +--> Medication-safety checks
+          +--> Risk scoring
+          +--> Second-opinion review
+          +--> SOAP-note generation
+                    |
+                    v
+          Structured clinical briefing
 ```
 
-#### 2. 📊 RAGAS Evaluation + /metrics Endpoint
-Make the AI measurable and trustworthy.
-- Every briefing scored for faithfulness, relevancy, and context precision
-- Live `/metrics` endpoint showing real performance numbers
-- Scores visible in the Agent Orchestration page UI
+This diagram is a conceptual view of the workflow. Check the source code for the exact execution order and current data flow.
 
-```json
-GET /metrics
-{
-  "total_briefings": 142,
-  "avg_latency_ms": 4200,
-  "avg_ragas_faithfulness": 0.87,
-  "avg_context_precision": 0.91,
-  "fhir_source": "hapi_sandbox"
-}
-```
+## Agents
 
-#### 3. 🏥 Full FHIR Patient Briefings
-Wire real HAPI FHIR patient data into all 9 agents (not just the patient list).
-- Currently: patient list = real FHIR, briefing = mock patient profiles
-- v3.0: both patient list AND briefing use real FHIR data end-to-end
-- Requires rewriting agent input schemas to accept FHIR Bundle format
-- Patients from the HAPI sandbox get real AI analysis, not mock data
+| Component | Responsibility |
+|---|---|
+| FHIR agent/client | Retrieves patient information from the configured source |
+| Memory agent | Examines available visit history for relevant trends |
+| Anomaly detector | Applies rule-based checks to selected vital signs |
+| RAG agent | Retrieves relevant passages from the guideline index |
+| Diagnosis agent | Drafts a differential diagnosis |
+| Drug-safety agent | Checks configured medication-interaction and contraindication rules |
+| Risk-scoring agent | Applies the implemented risk-scoring logic |
+| Second-opinion agent | Produces a separate review of the primary assessment |
+| SOAP-note generator | Organizes outputs into a structured SOAP note |
 
-```
-Current flow:    FHIR list → mock briefing
-v3.0 flow:       FHIR list → FHIR briefing → real clinical output
-```
+Agent outputs are generated by software and LLMs and must be reviewed by a qualified professional. The presence of a dedicated agent does not establish clinical validity.
 
----
+## Technology Stack
 
-## ✨ Current Features (v2.0)
+| Layer | Technologies |
+|---|---|
+| Backend | Python, FastAPI, Uvicorn |
+| LLM inference | Groq API, Llama 3.1 8B Instant |
+| Retrieval | LangChain, FAISS, TF-IDF |
+| Authentication | JWT-based authentication |
+| Patient-data integration | HAPI FHIR R4 client and mock fallback |
+| Frontend | React, Vite, Tailwind CSS |
+| Logging | Structured JSON logging with request trace IDs |
+| Deployment | Render (backend), Netlify (frontend) |
 
-| Feature | Description |
-|---------|-------------|
-| **JWT Authentication** | Doctor login with 8-hour session tokens |
-| **HAPI FHIR R4** | Real patient data from public sandbox + mock fallback |
-| **9 AI Agents** | Specialized agents for diagnosis, drug safety, risk scoring |
-| **Voice Briefings** | Browser TTS reads the AI briefing aloud — hands-free |
-| **Structured Logging** | Every request has a unique trace ID — JSON logs |
-| **SOAP Notes** | Auto-generated S/O/A/P clinical documentation |
-| **RAG Pipeline** | FAISS vectorstore with WHO/ADA/ACC/JNC guidelines |
-| **React Frontend** | 4-page Clinical Sentinel UI — dark sidebar, live data |
-| **Second Opinion** | A separate agent challenges the primary diagnosis |
-| **Anomaly Detection** | Rule-based pre-LLM vital sign checks |
+## Live Demo and API
 
----
+- **Frontend:** https://medicopilotproj.netlify.app
+- **Backend API:** https://medicopilot.onrender.com
+- **Interactive API documentation:** https://medicopilot.onrender.com/docs
+- **Health endpoint:** https://medicopilot.onrender.com/health
 
-## 🤖 The 9 Agents
+Live availability may change. Do not assume the demo is suitable for real or sensitive patient data.
 
-| Agent | Role |
-|-------|------|
-| **FHIRAgent** | Fetches patient bundle from HAPI FHIR R4 sandbox |
-| **MemoryAgent** | Analyzes visit history for clinical trends |
-| **AnomalyDetector** | Rule-based vital sign anomaly detection (pre-LLM) |
-| **RAGAgent** | Retrieves relevant medical guidelines from FAISS |
-| **DiagnosisAgent** | Generates differential diagnosis with confidence scores |
-| **DrugSafetyAgent** | Checks medication interactions and contraindications |
-| **RiskScoringAgent** | Calculates risk % using Framingham/ACC guidelines |
-| **SecondOpinionAgent** | Challenges primary diagnosis for balanced assessment |
-| **SOAPNoteGenerator** | Synthesizes all outputs into clinical documentation |
+## Data Sources and Limitations
 
----
+The project has supported both mock patient profiles and integration with the public HAPI FHIR R4 sandbox. The patient-list view and the briefing workflow may not use the same source in every version.
 
-## 🏗️ Architecture
+**Before describing the current deployment, verify the implementation:** document whether the briefing endpoint uses live FHIR records end-to-end or mock patient profiles. Do not describe the entire workflow as using real patient data unless that has been tested.
 
-```
-Clinician Login (JWT)
-        ↓
-MediCopilot Orchestrator
-   ↙      ↓       ↘
-FHIR   RAG KB   Memory
-   ↘      ↓       ↙
-  9 Specialized AI Agents
-  (Groq · Llama 3.1-8b-instant)
-        ↓
-  Structured Clinical Briefing
-  DDx · Drug Safety · Risk · SOAP · Voice
-```
+The guideline index, rules, agent prompts, and test fixtures are project-defined. This project has not established clinical effectiveness, regulatory compliance, or suitability for production healthcare use.
 
-### Tech Stack
+## Local Setup
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **LLM** | Groq — `llama-3.1-8b-instant` | Fast inference for all 9 agents |
-| **RAG** | LangChain + FAISS + TF-IDF | Medical guideline retrieval |
-| **Backend** | FastAPI + Uvicorn | REST API + A2A endpoints |
-| **Auth** | python-jose + passlib + bcrypt | JWT doctor authentication |
-| **FHIR** | HAPI FHIR R4 public sandbox | Real patient data |
-| **Logging** | structlog | JSON logs with trace IDs |
-| **Frontend** | React + Vite + Tailwind | 4-page Clinical Sentinel UI |
-| **Backend Deploy** | Render | Auto-deploy from GitHub |
-| **Frontend Deploy** | Netlify | Auto-deploy from GitHub |
+### Prerequisites
 
----
+- Python version compatible with `requirements.txt`
+- Node.js and npm
+- A Groq API key for LLM-backed features
+- Git
 
-## 📁 Project Structure
-
-```
-medicopilot/
-├── main.py                  # FastAPI v2.0 — JWT protected endpoints
-├── logging_config.py        # Structlog configuration
-├── middleware.py            # Request tracing middleware
-├── requirements.txt
-├── render.yaml              # Render deployment config
-├── Procfile
-├── auth/                    # JWT auth — login, tokens, registry
-│   ├── jwt_handler.py
-│   ├── middleware.py
-│   ├── models.py
-│   └── registry.py
-├── routes/
-│   └── auth_router.py       # /auth/login, /auth/me, /auth/logout
-├── fhir/
-│   ├── hapi_client.py       # HAPI FHIR R4 client + mock fallback
-│   └── mock_client.py       # 13 demo patients
-├── rag/
-│   └── retriever.py         # FAISS vectorstore
-├── agents/
-│   ├── orchestrator.py      # Main pipeline — 9 agents
-│   ├── anomaly_detector.py
-│   ├── diagnosis_agent.py
-│   ├── drug_agent.py
-│   ├── risk_agent.py
-│   ├── second_opinion_agent.py
-│   └── soap_generator.py
-├── models/
-│   └── schemas.py
-└── frontend/                # React app
-    └── src/
-        ├── components/      # Shared Sidebar
-        ├── pages/           # Dashboard, Briefing, SOAP, Agents
-        ├── api/             # Axios + JWT interceptors
-        └── store/           # Zustand auth store
-```
-
----
-
-## 🚀 Local Setup
+### 1. Clone the repository
 
 ```bash
-# Clone
 git clone https://github.com/shrey9741/medicopilot.git
 cd medicopilot
+```
 
-# Backend
+### 2. Set up the backend
+
+Create and activate a virtual environment.
+
+**Windows PowerShell**
+```powershell
 python -m venv venv
-venv\Scripts\activate        # Windows
+.\venv\Scripts\Activate.ps1
+```
+
+**macOS / Linux**
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
+```
 
-# Environment
+Create a local `.env` file from the example:
+
+```bash
 cp .env.example .env
-# Fill in GROQ_API_KEY and JWT_SECRET_KEY
+```
 
-# Run backend
+On Windows, you can also copy `.env.example` to `.env` manually. Set the required values in `.env`, for example:
+
+```dotenv
+GROQ_API_KEY=your_groq_api_key
+JWT_SECRET_KEY=replace_with_a_long_random_secret
+ENV=dev
+FHIR_USE_MOCK=false
+FRONTEND_URL=http://localhost:5173
+```
+
+Use the exact variable names expected by the code and deployment configuration. Never commit `.env` or real credentials.
+
+Start the API:
+
+```bash
 uvicorn main:app --reload --port 8000
+```
 
-# Frontend (new terminal)
+### 3. Set up the frontend
+
+In a separate terminal:
+
+```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### Environment Variables
+Open the local URL printed by Vite. Ensure the frontend API URL points to the local backend.
 
-```env
-GROQ_API_KEY=gsk_your_key_here
-JWT_SECRET_KEY=your_32_char_secret
-ENV=dev
-FHIR_USE_MOCK=false
-FRONTEND_URL=https://medicopilotproj.netlify.app
+## API Overview
+
+The application exposes authentication, patient, briefing, and health endpoints. The exact request and response schemas are defined in the FastAPI application and its OpenAPI documentation.
+
+| Endpoint | Purpose |
+|---|---|
+| `POST /auth/login` | Authenticate a demo user and obtain a token |
+| `GET /auth/me` | Return the authenticated user's identity |
+| `POST /invoke` | Run the clinical briefing workflow (protected) |
+| `GET /patients` | Retrieve the patient list (protected) |
+| `GET /health` | Check API health |
+
+Open `/docs` while the backend is running to inspect current schemas and try requests. Do not publish working credentials in this README. Use a restricted demo account and synthetic data if demo login is required.
+
+## Testing and Evaluation
+
+The repository includes `test_local.py`. Run it in the configured environment:
+
+```bash
+python test_local.py
 ```
 
----
+The project has also used 27 internally defined checks related to diagnosis accuracy and drug-interaction flagging. These are **project-level checks, not a clinically validated benchmark**. When publishing results, document the test cases, expected behavior, observed results, and limitations. Do not interpret a passing internal check as proof that a diagnosis or medication recommendation is medically correct.
 
-## 🔌 API Reference
+## Security Notes
 
-### `POST /auth/login`
-```json
-{ "username": "dr.thorne", "password": "demo123" }
+- Keep API keys and signing secrets in environment variables.
+- Use a unique, high-entropy JWT secret outside local development.
+- Do not use real patient information in public demos or test fixtures.
+- Restrict CORS to the intended frontend origins.
+- Avoid logging sensitive patient data or credentials.
+- Treat all LLM-generated output as untrusted until reviewed and validated.
+
+These are deployment considerations; verify each control in the actual code and hosting configuration before claiming it is fully enforced.
+
+## Project Structure
+
+```text
+medicopilot/
+├── agents/          # Agent implementations and orchestration
+├── auth/            # JWT authentication components
+├── fhir/            # FHIR client and mock-data fallback
+├── frontend/        # React application
+├── models/          # Request/response schemas
+├── rag/             # Retrieval implementation
+├── routes/          # API routes
+├── main.py          # FastAPI application entry point
+├── middleware.py    # Request middleware
+├── logging_config.py
+├── requirements.txt
+└── README.md
 ```
 
-### `POST /invoke` 🔒
-```json
-{ "patient_id": "P001", "sharp_token": null }
-```
+The exact file layout may evolve; consult the repository for the current structure.
 
-### `GET /patients` 🔒
-Returns patient list from HAPI FHIR sandbox or mock fallback.
+## Roadmap
 
-### `GET /health`
-```json
-{
-  "status": "ok",
-  "version": "2.0.0",
-  "rag_loaded": true,
-  "model": "llama-3.1-8b-instant"
-}
-```
+Potential next steps include:
 
----
+- End-to-end FHIR data flow through all briefing agents.
+- Automated retrieval and answer-quality evaluation with documented datasets.
+- More comprehensive failure-mode and API integration tests.
+- Better latency and error monitoring based on measured production-like runs.
+- Clearer data provenance in generated briefings.
 
-## 👥 Demo Patients (13 Mock Patients)
+These are future improvements, not claims about currently implemented functionality.
 
-| ID | Name | Conditions |
-|----|------|-----------|
-| P001 | John Doe, 62M | Type 2 Diabetes, Hypertension, CKD Stage 2 |
-| P002 | Sarah Chen, 45F | Atrial Fibrillation, Hypothyroidism |
-| P003 | Marcus Johnson, 71M | COPD, Heart Failure (EF 35%) |
-| P004 | Patricia Williams, 54F | Stage III Breast Cancer (HER2+) |
-| P005 | Robert Nguyen, 67M | Stage IV Lung Cancer, COPD |
-| P006 | Aiden Patel, 8M | Type 1 Diabetes, Asthma, ADHD |
-| P007 | Lily Thompson, 5F | ALL Leukemia, Immunosuppression |
-| P008 | Diana Foster, 34F | Bipolar I, Generalized Anxiety |
-| P009 | Carlos Rivera, 28M | Schizophrenia, Substance Use |
-| P010 | Eleanor Voss, 41F | SLE, Lupus Nephritis |
-| P011 | Samuel Okafor, 19M | Cystic Fibrosis, CF-related Diabetes |
-| P012 | Ingrid Larsson, 37F | Multiple Sclerosis (RRMS) |
-| P013 | Theo Blackwood, 52M | ALS, Respiratory Insufficiency |
+## Author
 
----
+**Shrey Kumar**  
+GitHub: https://github.com/shrey9741
 
-## 🌐 Deployment
+## License
 
-### Backend → Render
-
-| Variable | Value |
-|----------|-------|
-| `GROQ_API_KEY` | your Groq key |
-| `JWT_SECRET_KEY` | 32-char random secret |
-| `ENV` | `production` |
-| `FHIR_USE_MOCK` | `false` |
-| `FRONTEND_URL` | `https://medicopilotproj.netlify.app` |
-
-### Frontend → Netlify
-
-| Setting | Value |
-|---------|-------|
-| Base directory | `frontend` |
-| Build command | `npm run build` |
-| Publish directory | `frontend/dist` |
-| `VITE_API_URL` | `https://medicopilot.onrender.com` |
-
----
-
-## 🗺️ Roadmap
-
-| Version | Status | Highlights |
-|---------|--------|-----------|
-| **v1.0.0** | ✅ Complete | Streamlit UI, 9 agents, mock FHIR, Groq LLM |
-| **v2.0.0** | ✅ Complete | React frontend, JWT auth, real FHIR, structured logging |
-| **v3.0.0** | 🔭 Planned | ElevenLabs voice, RAGAS metrics, full FHIR briefings |
-
----
-
-## 👨‍💻 Author
-
-**Shrey Kumar**
-- GitHub: [@shrey9741](https://github.com/shrey9741)
-- Repo: [github.com/shrey9741/medicopilot](https://github.com/shrey9741/medicopilot)
-
----
-
-## 📄 License
-
-MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-> Built for the Prompt Opinion Healthcare AI Hackathon · Powered by Groq · HAPI FHIR R4 · JWT Secured · React + Netlify · A2A Compatible
+See the repository's `LICENSE` file for the applicable terms.
